@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import dbConnect from '@/lib/dbConnect';
-import User from '@/models/User';
+import connectDB from '@/lib/db/mongodb';
+import User from '@/lib/models/User';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 
@@ -15,7 +15,7 @@ export async function POST(req) {
             );
         }
 
-        await dbConnect();
+        await connectDB();
         const user = await User.findOne({ email: email.toLowerCase() });
 
         if (!user) {
@@ -29,9 +29,12 @@ export async function POST(req) {
         const resetToken = crypto.randomBytes(32).toString('hex');
         const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hour
 
+        // Stocker le token directement (pas de hashage)
         user.resetPasswordToken = resetToken;
         user.resetPasswordExpiry = resetTokenExpiry;
         await user.save();
+
+        console.log('[FORGOT-PASSWORD] Token generated:', resetToken);
 
         // Send email
         const transporter = nodemailer.createTransport({
