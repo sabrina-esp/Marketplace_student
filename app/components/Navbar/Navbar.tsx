@@ -108,7 +108,6 @@
 // }
 
 // export default Navbar;
-
 'use client';
 
 import { Disclosure } from '@headlessui/react';
@@ -120,8 +119,9 @@ import Drawerdata from "./Drawerdata";
 import Signdialog from "./Signdialog";
 import Registerdialog from "./Registerdialog";
 import Contactus from "./Contactus";
-import UserProfile from "./UserProfile"; // ← AJOUTER CETTE LIGNE
+import UserProfile from "./UserProfile";
 import { FaHome, FaBookOpen, FaUserGraduate, FaComments, FaUsers, FaEnvelope } from 'react-icons/fa';
+import { LayoutDashboard } from 'lucide-react'; // ← AJOUTER CETTE LIGNE
 
 interface NavigationItem {
     name: string;
@@ -136,6 +136,7 @@ const navigation: NavigationItem[] = [
     { name: 'Mentors', href: '#mentors-section', current: false, icon: <FaUserGraduate className="mr-2" /> },
     { name: 'Testimonial', href: '#testimonial-section', current: false, icon: <FaComments className="mr-2" /> },
     { name: 'Join', href: '#join-section', current: false, icon: <FaUsers className="mr-2" /> },
+    { name: 'Dashboard', href: '/dashboard', current: false, icon: <LayoutDashboard className="mr-2" /> }, // ← AJOUTER CETTE LIGNE
 ]
 
 function classNames(...classes: string[]) {
@@ -144,9 +145,8 @@ function classNames(...classes: string[]) {
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = React.useState(false);
-    const [user, setUser] = React.useState<any>(null); // ← AJOUTER
+    const [user, setUser] = React.useState<any>(null);
 
-    // ← AJOUTER : Charger l'utilisateur au démarrage
     React.useEffect(() => {
         const userData = localStorage.getItem('user');
         if (userData) {
@@ -157,7 +157,6 @@ const Navbar = () => {
             }
         }
 
-        // Écouter les changements (connexion/déconnexion)
         const handleUserLogin = () => {
             const userData = localStorage.getItem('user');
             if (userData) {
@@ -220,13 +219,10 @@ const Navbar = () => {
                             </div>
                         </div>
 
-                        {/* ← REMPLACER CETTE SECTION */}
                         <div className="hidden md:flex items-center gap-4">
                             {user ? (
-                                // Si connecté, afficher le profil
                                 <UserProfile />
                             ) : (
-                                // Sinon, afficher Sign In et Register
                                 <>
                                     <Signdialog />
                                     <Registerdialog />
