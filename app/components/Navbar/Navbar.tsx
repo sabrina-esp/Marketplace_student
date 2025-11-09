@@ -120,7 +120,7 @@ import Signdialog from "./Signdialog";
 import Registerdialog from "./Registerdialog";
 import Contactus from "./Contactus";
 import UserProfile from "./UserProfile";
-import { FaHome, FaBookOpen, FaUserGraduate, FaComments, FaUsers, FaEnvelope, FaBriefcase } from 'react-icons/fa';
+import { FaHome, FaUserGraduate, FaComments, FaUsers, FaEnvelope, FaBriefcase, FaShoppingBag } from 'react-icons/fa';
 import { LayoutDashboard } from 'lucide-react';
 
 interface NavigationItem {
@@ -132,7 +132,7 @@ interface NavigationItem {
 
 const navigation: NavigationItem[] = [
     { name: 'Home', href: '/', current: true, icon: <FaHome className="mr-2" /> },
-    { name: 'Courses', href: '#courses-section', current: false, icon: <FaBookOpen className="mr-2" /> },
+    { name: 'Products', href: '/products', current: false, icon: <FaShoppingBag className="mr-2" /> },
     { name: 'Marketplace', href: '/marketplace', current: false, icon: <FaBriefcase className="mr-2" /> },
     { name: 'Mentors', href: '#mentors-section', current: false, icon: <FaUserGraduate className="mr-2" /> },
     { name: 'Testimonial', href: '#testimonial-section', current: false, icon: <FaComments className="mr-2" /> },
