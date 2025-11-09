@@ -1,0 +1,202 @@
+const fs = require('fs');
+const path = require('path');
+
+// Create icons directory if it doesn't exist
+const iconsDir = path.join(__dirname, '../public/icons');
+if (!fs.existsSync(iconsDir)) {
+  fs.mkdirSync(iconsDir, { recursive: true });
+}
+
+console.log('📱 Generating PWA Icons...\n');
+
+// Icon sizes needed for PWA
+const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+
+// Generate HTML file that creates PNG icons in browser
+const htmlGenerator = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>PWA Icon Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 { color: #7c3aed; }
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .icon-item {
+      text-align: center;
+      padding: 10px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      background: #fafafa;
+    }
+    canvas {
+      display: block;
+      margin: 10px auto;
+      border-radius: 20%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    button {
+      background: #7c3aed;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover { background: #6d28d9; }
+    .download-all {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 20px 0;
+    }
+    .download-all:hover { background: #059669; }
+    .instructions {
+      background: #eff6ff;
+      padding: 15px;
+      border-left: 4px solid #3b82f6;
+      margin-bottom: 20px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 PWA Icon Generator for Marketplace</h1>
+    
+    <div class="instructions">
+      <strong>📋 Instructions:</strong>
+      <ol>
+        <li>Click "Download All Icons" to automatically download all sizes</li>
+        <li>Or click individual "Download" buttons for specific sizes</li>
+        <li>Save all files to: <code>public/icons/</code></li>
+        <li>Restart your dev server</li>
+      </ol>
+    </div>
+
+    <button class="download-all" onclick="downloadAll()">⬇️ Download All Icons</button>
+    
+    <div class="icon-grid" id="icons"></div>
+  </div>
+  
+  <script>
+    const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+    const container = document.getElementById('icons');
+    const canvases = [];
+    
+    sizes.forEach(size => {
+      const canvas = document.createElement('canvas');
+      canvas.width = size;
+      canvas.height = size;
+      
+      const ctx = canvas.getContext('2d');
+      
+      // Create gradient background
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#7c3aed');
+      gradient.addColorStop(1, '#8b5cf6');
+      
+      // Draw circle background
+      ctx.beginPath();
+      ctx.arc(size/2, size/2, size/2, 0, Math.PI * 2);
+      ctx.fillStyle = gradient;
+      ctx.fill();
+      
+      // Draw white letter 'M'
+      ctx.fillStyle = 'white';
+      ctx.font = \`bold \${size * 0.5}px Arial, sans-serif\`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('M', size/2, size/2);
+      
+      // Add small graduation cap
+      ctx.save();
+      ctx.translate(size * 0.7, size * 0.25);
+      ctx.scale(size / 100, size / 100);
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.beginPath();
+      ctx.moveTo(12, 3);
+      ctx.lineTo(1, 9);
+      ctx.lineTo(12, 15);
+      ctx.lineTo(21, 10);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+      
+      canvases.push({ canvas, size });
+      
+      // Create UI
+      const iconItem = document.createElement('div');
+      iconItem.className = 'icon-item';
+      
+      const label = document.createElement('div');
+      label.textContent = \`\${size}x\${size}px\`;
+      label.style.fontWeight = 'bold';
+      label.style.marginBottom = '5px';
+      
+      const btn = document.createElement('button');
+      btn.textContent = 'Download';
+      btn.onclick = () => downloadIcon(canvas, size);
+      
+      iconItem.appendChild(canvas);
+      iconItem.appendChild(label);
+      iconItem.appendChild(btn);
+      container.appendChild(iconItem);
+    });
+    
+    function downloadIcon(canvas, size) {
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = \`icon-\${size}x\${size}.png\`;
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+    }
+    
+    function downloadAll() {
+      let delay = 0;
+      canvases.forEach(({ canvas, size }) => {
+        setTimeout(() => downloadIcon(canvas, size), delay);
+        delay += 200; // Small delay between downloads
+      });
+    }
+  </script>
+</body>
+</html>`;
+
+// Save the HTML generator
+fs.writeFileSync(path.join(iconsDir, 'icon-generator.html'), htmlGenerator);
+
+console.log('✅ Icon generator created successfully!\n');
+console.log('📂 Location: public/icons/icon-generator.html\n');
+console.log('� Next steps:');
+console.log('1. Open: public/icons/icon-generator.html in your browser');
+console.log('2. Click "Download All Icons"');
+console.log('3. Save all PNG files to public/icons/');
+console.log('4. Restart your dev server\n');
+console.log('✨ Done!\n');
