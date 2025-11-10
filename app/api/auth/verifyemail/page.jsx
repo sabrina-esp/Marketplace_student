@@ -23,7 +23,11 @@ function VerifyEmailContent() {
       setStatus('error');
       setMessage('Token de vérification manquant dans l\'URL');
     }
+<<<<<<< HEAD
   }, [token]);
+=======
+  }, [token, verifyEmailWithToken]);
+>>>>>>> origin/elyess
 
   /**
    * Vérifier l'email avec le token
@@ -205,7 +209,11 @@ function VerifyEmailContent() {
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                     </svg>
+<<<<<<< HEAD
                     <span>Renvoyer l'email</span>
+=======
+                    <span>Renvoyer l&apos;email</span>
+>>>>>>> origin/elyess
                   </button>
                 )}
                 
@@ -230,7 +238,11 @@ function VerifyEmailContent() {
         {/* Info supplémentaire */}
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
+<<<<<<< HEAD
             Besoin d'aide ?{' '}
+=======
+            Besoin d&apos;aide ?{' '}
+>>>>>>> origin/elyess
             <a href="mailto:support@example.com" className="text-purple-600 hover:text-purple-800 font-medium">
               Contactez le support
             </a>

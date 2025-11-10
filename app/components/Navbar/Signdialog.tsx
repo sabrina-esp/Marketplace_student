@@ -60,12 +60,20 @@ const SigninDialog = () => {
             const data = await response.json()
 
             if (data.success) {
+                // ✅ SAUVEGARDER LE TOKEN ET L'UTILISATEUR
+                localStorage.setItem('token', data.token)
+                localStorage.setItem('user', JSON.stringify(data.user))
+                
                 setMessage({ 
                     type: 'success', 
                     text: '🎉 Welcome back! Login successful.' 
                 })
                 setFormData({ email: '', password: '', rememberMe: false })
-                setTimeout(() => closeModal(), 2500)
+                
+                // Recharger la page pour mettre à jour la navbar
+                setTimeout(() => {
+                    window.location.reload()
+                }, 1500)
             } else {
                 setMessage({ 
                     type: 'error', 
@@ -346,7 +354,7 @@ const SigninDialog = () => {
                                                 <div className="h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent flex-1"></div>
                                             </div>
                                             <p className="text-sm text-gray-600">
-                                                Don't have an account?{' '}
+                                                Don&apos;t have an account?{' '}
                                                 <button 
                                                     className="text-purple-600 font-bold hover:text-purple-700 transition-colors hover:underline decoration-2 underline-offset-2"
                                                     onClick={() => {

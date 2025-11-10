@@ -19,7 +19,7 @@ export default function VerifyEmail() {
       setStatus('❌ Token de vérification manquant');
       setIsLoading(false);
     }
-  }, [token]);
+  }, [token, verifyEmail]);
 
   const verifyEmail = async () => {
     try {

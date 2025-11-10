@@ -35,7 +35,11 @@ export default function VerifyCodePage() {
     if (inputRefs[0].current) {
       inputRefs[0].current.focus();
     }
+<<<<<<< HEAD
   }, []);
+=======
+  }, [inputRefs]);
+>>>>>>> origin/elyess
 
   // Gestion du cooldown pour le renvoi
   useEffect(() => {
@@ -429,7 +433,11 @@ export default function VerifyCodePage() {
           </h3>
           <ul className="text-xs text-blue-800 space-y-1">
             <li>• Vérifiez votre boîte de réception email</li>
+<<<<<<< HEAD
             <li>• Le code est dans l'email de vérification</li>
+=======
+            <li>• Le code est dans l&apos;email de vérification</li>
+>>>>>>> origin/elyess
             <li>• Vérifiez aussi votre dossier spam</li>
             <li>• Le code expire après 24 heures</li>
           </ul>
@@ -438,7 +446,11 @@ export default function VerifyCodePage() {
         {/* Contact support */}
         <div className="mt-4 text-center">
           <p className="text-xs text-gray-600">
+<<<<<<< HEAD
             Besoin d'aide ?{' '}
+=======
+            Besoin d&apos;aide ?{' '}
+>>>>>>> origin/elyess
             <a href="mailto:support@example.com" className="text-purple-600 hover:text-purple-800 font-medium">
               Contactez le support
             </a>

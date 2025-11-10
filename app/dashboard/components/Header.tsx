@@ -13,7 +13,7 @@ const Header: React.FC<HeaderProps> = ({ onCalendarClick }) => {
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
         <div className="mb-4 lg:mb-0">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Student Dashboard</h1>
-          <p className="text-gray-500">Welcome back! Here's what's happening with your platform today.</p>
+          <p className="text-gray-500">Welcome back! Here&apos;s what&apos;s happening with your platform today.</p>
         </div>
         
         <div className="flex items-center gap-3">

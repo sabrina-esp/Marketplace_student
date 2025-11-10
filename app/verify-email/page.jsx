@@ -12,17 +12,14 @@ function VerifyEmailContent() {
   useEffect(() => {
     const verifyEmail = async () => {
       const token = searchParams.get('token');
-
       if (!token) {
         setStatus('error');
         setMessage('Token manquant');
         return;
       }
-
       try {
         const response = await fetch(`/api/auth/verify-email?token=${token}`);
         const data = await response.json();
-
         if (data.success) {
           setStatus('success');
           setMessage('Email vérifié avec succès !');
@@ -39,7 +36,6 @@ function VerifyEmailContent() {
         console.error('Erreur:', error);
       }
     };
-
     verifyEmail();
   }, [searchParams, router]);
 

@@ -103,14 +103,12 @@ export default function UserProfile() {
           <div className="p-2">
             {/* Mon Profil */}
             <Menu.Item>
-              {({ active }: { active: boolean }) => (
+              {({ active }) => (
                 <button
                   onClick={() => {
                     router.push('/profile');
                   }}
-                  className={`${
-                    active ? 'bg-gray-100' : ''
-                  } group flex w-full items-center rounded-xl px-4 py-3 text-sm text-gray-900 transition-colors`}
+                  className={`$${active ? 'bg-gray-100' : ''} group flex w-full items-center rounded-xl px-4 py-3 text-sm text-gray-900 transition-colors`}
                 >
                   <span className="mr-3 text-xl">👤</span>
                   <span className="font-medium">Mon Profil</span>
@@ -120,7 +118,7 @@ export default function UserProfile() {
 
             {/* Paramètres */}
             <Menu.Item>
-              {({ active }: { active: boolean }) => (
+              {({ active }) => (
                 <button
                   onClick={() => router.push('/settings')}
                   className={`${
@@ -135,7 +133,7 @@ export default function UserProfile() {
 
             {/* Mes Commandes */}
             <Menu.Item>
-              {({ active }: { active: boolean }) => (
+              {({ active }) => (
                 <button
                   onClick={() => router.push('/orders')}
                   className={`${
@@ -150,7 +148,7 @@ export default function UserProfile() {
 
             {/* Mes Cours */}
             <Menu.Item>
-              {({ active }: { active: boolean }) => (
+              {({ active }) => (
                 <button
                   onClick={() => router.push('/my-courses')}
                   className={`${
@@ -168,7 +166,7 @@ export default function UserProfile() {
 
             {/* Déconnexion */}
             <Menu.Item>
-              {({ active }: { active: boolean }) => (
+              {({ active }) => (
                 <button
                   onClick={handleLogout}
                   className={`${

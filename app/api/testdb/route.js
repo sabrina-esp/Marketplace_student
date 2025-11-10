@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { connectDB } from "../../../lib/mongodb";
+=======
+import { connectDB } from '@/lib/db/mongodb';
+>>>>>>> origin/elyess
 import mongoose from "mongoose";
 
 // Define a test schema (optional)

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import connectDB from '@/lib/services/connectDB';
+import connectDB from '@/lib/db/mongodb';
 import authService from '@/lib/services/AuthService';
 /**
  * POST /api/auth/register

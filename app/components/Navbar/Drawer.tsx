@@ -29,7 +29,7 @@ const Drawer = ({ children, isOpen, setIsOpen }: DrawerProps) => {
                     <header className="p-4 flex items-center"><img
                         className="h-30px w-30px mx-auto"
                         src={"/assets/logo/Logo.svg"}
-                        alt="Marketplace-Logo"
+                        alt="Courses-Logo"
                         onClick={() => {
                             setIsOpen(false);
                         }}

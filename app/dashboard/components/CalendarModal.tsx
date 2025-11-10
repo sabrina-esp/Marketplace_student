@@ -155,7 +155,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
             onClick={() => selectDate(new Date())}
             className="flex-1 px-4 py-3 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition"
           >
-            Aujourd'hui
+            Aujourd&apos;hui
           </button>
         </div>
       </div>

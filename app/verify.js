@@ -10,7 +10,7 @@ export default function VerifyEmail() {
     if (token) {
       verifyEmail();
     }
-  }, [token]);
+  }, [token, verifyEmail]);
 
   const verifyEmail = async () => {
     try {

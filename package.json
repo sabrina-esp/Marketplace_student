@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node server.js",
+    "dev": "next dev -p 3011",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js"
+    "start": "next start -p 3011"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.19",
@@ -22,6 +22,7 @@
     "lucide-react": "^0.545.0",
     "mongoose": "^8.19.1",
     "next": "13.4.2",
+    "next-pwa": "^5.6.0",
     "nodemailer": "^7.0.9",
     "postcss": "8.4.23",
     "react": "18.2.0",
@@ -36,6 +37,12 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
-    "@types/react-slick": "^0.23.10"
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/react-slick": "^0.23.10",
+    "@types/web-push": "^3.6.4",
+    "sharp": "^0.34.5",
+    "tailwindcss": "3.3.2",
+    "typescript": "5.0.4",
+    "web-push": "^3.6.7"
   }
 }

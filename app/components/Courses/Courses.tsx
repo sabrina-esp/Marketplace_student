@@ -784,7 +784,7 @@ const NamesList = () => {
                                     <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
                                         <button className="group relative bg-white text-gray-900 font-black py-5 px-12 rounded-2xl shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)] transform hover:scale-105 transition-all text-xl overflow-hidden">
                                             <div className="absolute inset-0 bg-gradient-to-r from-purple-400/20 to-fuchsia-400/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                            <span className="relative z-10">S'inscrire maintenant - ${selectedCourse.price}</span>
+                                            <span className="relative z-10">S&apos;inscrire maintenant - ${selectedCourse.price}</span>
                                         </button>
                                         <button className="bg-white/20 backdrop-blur-md hover:bg-white/30 border-2 border-white/50 text-white font-black py-5 px-10 rounded-2xl transition-all hover:scale-105 shadow-lg">
                                             Ajouter aux favoris ❤️

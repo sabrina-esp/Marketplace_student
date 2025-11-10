@@ -120,7 +120,8 @@ import Signdialog from "./Signdialog";
 import Registerdialog from "./Registerdialog";
 import Contactus from "./Contactus";
 import UserProfile from "./UserProfile";
-import { FaHome, FaUserGraduate, FaComments, FaUsers, FaEnvelope, FaBriefcase, FaShoppingBag } from 'react-icons/fa';
+import InstallButton from "./InstallButton";
+import { FaHome, FaBookOpen, FaUserGraduate, FaComments, FaUsers, FaUser, FaShoppingBag, FaBriefcase, FaEnvelope } from 'react-icons/fa';
 import { LayoutDashboard } from 'lucide-react';
 
 interface NavigationItem {
@@ -137,7 +138,8 @@ const navigation: NavigationItem[] = [
     { name: 'Mentors', href: '#mentors-section', current: false, icon: <FaUserGraduate className="mr-2" /> },
     { name: 'Testimonial', href: '#testimonial-section', current: false, icon: <FaComments className="mr-2" /> },
     { name: 'Join', href: '#join-section', current: false, icon: <FaUsers className="mr-2" /> },
-    { name: 'Dashboard', href: '/dashboard', current: false, icon: <LayoutDashboard className="mr-2" /> },
+    { name: 'Dashboard', href: '/dashboard', current: false, icon: <LayoutDashboard className="mr-2 w-4 h-4" /> },
+    { name: 'Profile', href: '/profile', current: false, icon: <FaUser className="mr-2" /> },
 ]
 
 function classNames(...classes: string[]) {
@@ -221,6 +223,9 @@ const Navbar = () => {
                         </div>
 
                         <div className="hidden md:flex items-center gap-4">
+                            {/* Install PWA Button */}
+                            <InstallButton />
+                            
                             {user ? (
                                 <UserProfile />
                             ) : (
