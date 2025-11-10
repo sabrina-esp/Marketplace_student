@@ -1,0 +1,28 @@
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad-192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="96" cy="96" r="96" fill="url(#grad-192)"/>
+  
+  <!-- Letter M -->
+  <text 
+    x="50%" 
+    y="50%" 
+    font-family="Arial, Helvetica, sans-serif" 
+    font-size="96" 
+    font-weight="bold" 
+    fill="white" 
+    text-anchor="middle" 
+    dominant-baseline="central">M</text>
+  
+  <!-- Graduation cap -->
+  <g transform="translate(130.56, 53.760000000000005)">
+    <path fill="white" opacity="0.9" d="M0,-9.600000000000001 L-15.36,-3.84 L0,1.92 L15.36,-3.84 Z"/>
+    <rect x="-1.92" y="1.92" width="3.84" height="11.52" fill="white" opacity="0.9"/>
+  </g>
+</svg>

@@ -1,0 +1,40 @@
+version: '3.9'
+services:
+  app:
+    build: .
+    container_name: marketplace_app
+    ports:
+      - "3011:3011"
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: 3011
+      # Use internal Mongo hostname from compose
+      MONGODB_URI: mongodb://mongo:27017/marketplace-db
+      JWT_SECRET: ${JWT_SECRET:-change_me}
+      NEXT_PUBLIC_APP_URL: http://localhost:3011
+      NEXT_PUBLIC_SOCKET_URL: http://localhost:3011
+      NEXT_PUBLIC_SOCKET_PATH: /socket.io
+  NEXT_PUBLIC_CALL_API_URL: http://localhost:5000
+  NEXT_PUBLIC_LIVEKIT_WS_HOST: localhost:5000
+      CONTACT_EMAIL: ${CONTACT_EMAIL:-example@example.com}
+    depends_on:
+      - mongo
+    # If you later add a health endpoint, you can define healthcheck
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:3011/health"]
+    #   interval: 30s
+    #   timeout: 5s
+    #   retries: 3
+
+  mongo:
+    image: mongo:6
+    container_name: marketplace_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
