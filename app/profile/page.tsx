@@ -18,6 +18,9 @@ interface User {
   phone?: string;
   bio?: string;
   avatar?: string;
+  subjects?: string[];
+  interests?: string[];
+  level?: string;
   isVerified: boolean;
   isEmailVerified: boolean;
   createdAt: string;
@@ -37,9 +40,18 @@ export default function ProfilePage() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [formData, setFormData] = useState({ name: '', phone: '', bio: '' });
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    phone: '', 
+    bio: '', 
+    subjects: [] as string[], 
+    interests: [] as string[],
+    level: 'Beginner'
+  });
   const [passwordData, setPasswordData] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const [subjectInput, setSubjectInput] = useState('');
+  const [interestInput, setInterestInput] = useState('');
 
 
 
@@ -52,7 +64,14 @@ export default function ProfilePage() {
       const data = await response.json();
       if (data.success) {
         setUser(data.user);
-        setFormData({ name: data.user.name || '', phone: data.user.phone || '', bio: data.user.bio || '' });
+        setFormData({ 
+          name: data.user.name || '', 
+          phone: data.user.phone || '', 
+          bio: data.user.bio || '',
+          subjects: data.user.subjects || [],
+          interests: data.user.interests || [],
+          level: data.user.level || 'Beginner'
+        });
         setAvatarPreview(data.user.avatar || null);
       } else { localStorage.removeItem('token'); localStorage.removeItem('user'); router.push('/'); }
     } catch (error) { console.error('Error:', error); router.push('/'); }
@@ -588,6 +607,46 @@ export default function ProfilePage() {
                 <ChevronRightIcon className={`w-6 h-6 ${isDarkMode ? 'text-purple-400' : 'text-purple-500'}`} />
               </button>
 
+              {/* Edit Profile */}
+              <button
+                onClick={() => setIsEditing(true)}
+                className="w-full p-4 rounded-2xl flex items-center justify-between transition-all duration-300 hover:scale-[1.02] border-2 shadow-md hover:shadow-lg"
+                style={{
+                  background: isDarkMode 
+                    ? 'rgba(139, 92, 246, 0.1)' 
+                    : 'rgba(139, 92, 246, 0.05)',
+                  borderColor: isDarkMode 
+                    ? 'rgba(139, 92, 246, 0.3)' 
+                    : 'rgba(139, 92, 246, 0.2)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = isDarkMode 
+                    ? 'rgba(139, 92, 246, 0.2)' 
+                    : 'rgba(139, 92, 246, 0.1)';
+                  e.currentTarget.style.borderColor = isDarkMode 
+                    ? 'rgba(139, 92, 246, 0.5)' 
+                    : 'rgba(139, 92, 246, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = isDarkMode 
+                    ? 'rgba(139, 92, 246, 0.1)' 
+                    : 'rgba(139, 92, 246, 0.05)';
+                  e.currentTarget.style.borderColor = isDarkMode 
+                    ? 'rgba(139, 92, 246, 0.3)' 
+                    : 'rgba(139, 92, 246, 0.2)';
+                }}
+              >
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-xl" style={{
+                    background: isDarkMode ? 'rgba(139, 92, 246, 0.25)' : 'rgba(139, 92, 246, 0.2)'
+                  }}>
+                    <PencilIcon className={`w-6 h-6 ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`} />
+                  </div>
+                  <span className={`text-lg font-semibold ${isDarkMode ? 'text-purple-400' : 'text-purple-600'}`}>Edit Profile</span>
+                </div>
+                <ChevronRightIcon className={`w-6 h-6 ${isDarkMode ? 'text-purple-400' : 'text-purple-500'}`} />
+              </button>
+
               {/* Logout */}
               <button
                 onClick={handleLogout}
@@ -715,21 +774,300 @@ export default function ProfilePage() {
                         <p className={`text-sm mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>{formData.bio.length}/500 characters</p>
                       </div>
 
-                      <div className="flex gap-3 pt-2">
+                      {/* Subjects Section */}
+                      <div className="group">
+                        <label className={`block text-sm font-bold mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} flex items-center gap-2`}>
+                          <span className="text-2xl">📚</span>
+                          <span>Subjects <span className="text-purple-600">(AI Matching)</span></span>
+                        </label>
+                        <div className="flex gap-2 mb-3">
+                          <input
+                            type="text"
+                            value={subjectInput}
+                            onChange={(e) => setSubjectInput(e.target.value)}
+                            onKeyPress={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                if (subjectInput.trim() && formData.subjects.length < 10) {
+                                  setFormData({ ...formData, subjects: [...formData.subjects, subjectInput.trim()] });
+                                  setSubjectInput('');
+                                }
+                              }
+                            }}
+                            style={{
+                              backgroundColor: isDarkMode ? '#1e293b' : '#ffffff',
+                              color: isDarkMode ? '#f1f5f9' : '#0f172a',
+                              borderColor: isDarkMode ? '#475569' : '#cbd5e1',
+                              fontSize: '15px',
+                              fontWeight: '600'
+                            }}
+                            className="flex-1 px-4 py-4 border-2 rounded-2xl focus:border-purple-500 focus:ring-4 focus:ring-purple-100 transition-all duration-300 outline-none shadow-sm hover:shadow-md"
+                            placeholder="e.g., JavaScript, React, Python..."
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (subjectInput.trim() && formData.subjects.length < 10) {
+                                setFormData({ ...formData, subjects: [...formData.subjects, subjectInput.trim()] });
+                                setSubjectInput('');
+                              }
+                            }}
+                            style={{ 
+                              backgroundColor: '#7c3aed',
+                              color: '#ffffff',
+                              fontWeight: '700',
+                              fontSize: '15px',
+                              minWidth: '90px'
+                            }}
+                            className="px-8 py-4 rounded-2xl transition-all shadow-lg hover:shadow-xl hover:scale-105 border-2 border-purple-400"
+                          >
+                            Add
+                          </button>
+                        </div>
+                        <div 
+                          style={{
+                            backgroundColor: isDarkMode ? '#1e1b4b' : '#faf5ff',
+                            borderColor: isDarkMode ? '#5b21b6' : '#e9d5ff',
+                            minHeight: '80px'
+                          }}
+                          className="flex flex-wrap gap-3 mb-3 p-5 rounded-2xl border-2 shadow-inner"
+                        >
+                          {formData.subjects.length === 0 ? (
+                            <span 
+                              style={{
+                                color: isDarkMode ? '#94a3b8' : '#64748b',
+                                fontSize: '14px'
+                              }}
+                              className="italic font-medium"
+                            >
+                              No subjects added yet
+                            </span>
+                          ) : (
+                            formData.subjects.map((subject, index) => (
+                              <span
+                                key={index}
+                                style={{
+                                  backgroundColor: '#7c3aed',
+                                  color: '#ffffff',
+                                  fontSize: '14px',
+                                  fontWeight: '600'
+                                }}
+                                className="px-4 py-2 rounded-xl flex items-center gap-2 shadow-md transition-all hover:scale-105"
+                              >
+                                {subject}
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setFormData({
+                                      ...formData,
+                                      subjects: formData.subjects.filter((_, i) => i !== index)
+                                    });
+                                  }}
+                                  style={{
+                                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                                    color: '#ffffff',
+                                    fontWeight: 'bold',
+                                    fontSize: '18px'
+                                  }}
+                                  className="ml-1 hover:bg-white/30 rounded-full w-6 h-6 flex items-center justify-center transition-all"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            ))
+                          )}
+                        </div>
+                        <p 
+                          style={{
+                            color: isDarkMode ? '#c084fc' : '#7c3aed',
+                            fontSize: '14px',
+                            fontWeight: '600'
+                          }}
+                        >
+                          {formData.subjects.length}/10 subjects • Press Enter or click Add
+                        </p>
+                      </div>
+
+                      {/* Interests Section */}
+                      <div className="group">
+                        <label className={`block text-sm font-bold mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} flex items-center gap-2`}>
+                          <span className="text-2xl">💡</span>
+                          <span>Interests <span className="text-purple-600">(AI Matching)</span></span>
+                        </label>
+                        <div className="flex gap-2 mb-3">
+                          <input
+                            type="text"
+                            value={interestInput}
+                            onChange={(e) => setInterestInput(e.target.value)}
+                            onKeyPress={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                if (interestInput.trim() && formData.interests.length < 15) {
+                                  setFormData({ ...formData, interests: [...formData.interests, interestInput.trim()] });
+                                  setInterestInput('');
+                                }
+                              }
+                            }}
+                            style={{
+                              backgroundColor: isDarkMode ? '#1e293b' : '#ffffff',
+                              color: isDarkMode ? '#f1f5f9' : '#0f172a',
+                              borderColor: isDarkMode ? '#475569' : '#cbd5e1',
+                              fontSize: '15px',
+                              fontWeight: '600'
+                            }}
+                            className="flex-1 px-4 py-4 border-2 rounded-2xl focus:border-purple-500 focus:ring-4 focus:ring-purple-100 transition-all duration-300 outline-none shadow-sm hover:shadow-md"
+                            placeholder="e.g., Web Development, AI, Design..."
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (interestInput.trim() && formData.interests.length < 15) {
+                                setFormData({ ...formData, interests: [...formData.interests, interestInput.trim()] });
+                                setInterestInput('');
+                              }
+                            }}
+                            style={{ 
+                              backgroundColor: '#7c3aed',
+                              color: '#ffffff',
+                              fontWeight: '700',
+                              fontSize: '15px',
+                              minWidth: '90px'
+                            }}
+                            className="px-8 py-4 rounded-2xl transition-all shadow-lg hover:shadow-xl hover:scale-105 border-2 border-purple-400"
+                          >
+                            Add
+                          </button>
+                        </div>
+                        <div 
+                          style={{
+                            backgroundColor: isDarkMode ? '#1e1b4b' : '#faf5ff',
+                            borderColor: isDarkMode ? '#5b21b6' : '#e9d5ff',
+                            minHeight: '80px'
+                          }}
+                          className="flex flex-wrap gap-3 mb-3 p-5 rounded-2xl border-2 shadow-inner"
+                        >
+                          {formData.interests.length === 0 ? (
+                            <span 
+                              style={{
+                                color: isDarkMode ? '#94a3b8' : '#64748b',
+                                fontSize: '14px'
+                              }}
+                              className="italic font-medium"
+                            >
+                              No interests added yet
+                            </span>
+                          ) : (
+                            formData.interests.map((interest, index) => (
+                              <span
+                                key={index}
+                                style={{
+                                  backgroundColor: '#7c3aed',
+                                  color: '#ffffff',
+                                  fontSize: '14px',
+                                  fontWeight: '600'
+                                }}
+                                className="px-4 py-2 rounded-xl flex items-center gap-2 shadow-md transition-all hover:scale-105"
+                              >
+                                {interest}
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    setFormData({
+                                      ...formData,
+                                      interests: formData.interests.filter((_, i) => i !== index)
+                                    });
+                                  }}
+                                  style={{
+                                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                                    color: '#ffffff',
+                                    fontWeight: 'bold',
+                                    fontSize: '18px'
+                                  }}
+                                  className="ml-1 hover:bg-white/30 rounded-full w-6 h-6 flex items-center justify-center transition-all"
+                                >
+                                  ×
+                                </button>
+                              </span>
+                            ))
+                          )}
+                        </div>
+                        <p 
+                          style={{
+                            color: isDarkMode ? '#c084fc' : '#7c3aed',
+                            fontSize: '14px',
+                            fontWeight: '600'
+                          }}
+                        >
+                          {formData.interests.length}/15 interests • Press Enter or click Add
+                        </p>
+                      </div>
+
+                      {/* Level Selection */}
+                      <div className="group">
+                        <label className={`block text-sm font-bold mb-3 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} flex items-center gap-2`}>
+                          <span className="text-2xl">🎯</span>
+                          <span>Skill Level <span className="text-indigo-600">(AI Matching)</span></span>
+                        </label>
+                        <div className="relative">
+                          <select
+                            value={formData.level}
+                            onChange={(e) => setFormData({ ...formData, level: e.target.value })}
+                            className={`w-full px-6 py-4 border-2 rounded-2xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all duration-300 outline-none font-bold shadow-sm hover:shadow-md appearance-none cursor-pointer ${
+                              isDarkMode 
+                                ? 'bg-[#16213e] border-gray-700 text-white' 
+                                : 'bg-white border-gray-200 text-gray-900'
+                            }`}
+                            style={{
+                              backgroundImage: isDarkMode 
+                                ? 'url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%23a78bfa\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")'
+                                : 'url("data:image/svg+xml,%3csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 20 20\'%3e%3cpath stroke=\'%236366f1\' stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M6 8l4 4 4-4\'/%3e%3c/svg%3e")',
+                              backgroundPosition: 'right 1rem center',
+                              backgroundRepeat: 'no-repeat',
+                              backgroundSize: '1.5em 1.5em',
+                              paddingRight: '3rem'
+                            }}
+                          >
+                            <option value="Beginner" style={{ backgroundColor: isDarkMode ? '#16213e' : '#fff', color: isDarkMode ? '#fff' : '#111' }}>
+                              🌱 Beginner - Just starting out
+                            </option>
+                            <option value="Intermediate" style={{ backgroundColor: isDarkMode ? '#16213e' : '#fff', color: isDarkMode ? '#fff' : '#111' }}>
+                              📚 Intermediate - Building skills
+                            </option>
+                            <option value="Advanced" style={{ backgroundColor: isDarkMode ? '#16213e' : '#fff', color: isDarkMode ? '#fff' : '#111' }}>
+                              🚀 Advanced - Experienced
+                            </option>
+                            <option value="Expert" style={{ backgroundColor: isDarkMode ? '#16213e' : '#fff', color: isDarkMode ? '#fff' : '#111' }}>
+                              ⭐ Expert - Master level
+                            </option>
+                          </select>
+                        </div>
+                        <p className={`text-sm mt-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                          Select your current skill level to match with similar learners
+                        </p>
+                      </div>
+
+                      <div className="flex gap-4 pt-6">
                         <button
                           type="submit"
                           disabled={saving}
-                          className="flex-1 py-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white rounded-2xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 flex items-center justify-center gap-2"
+                          style={{
+                            backgroundColor: '#7c3aed',
+                            color: '#ffffff',
+                            fontWeight: '800',
+                            fontSize: '16px',
+                            minHeight: '56px'
+                          }}
+                          className="flex-1 py-4 px-6 hover:bg-purple-700 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl disabled:opacity-50 flex items-center justify-center gap-3 border-2 border-purple-400"
                         >
                           {saving ? (
                             <>
-                              <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
-                              Saving...
+                              <div className="animate-spin rounded-full h-6 w-6 border-3 border-white border-t-transparent"></div>
+                              <span style={{ color: '#ffffff', fontWeight: '800' }}>Saving...</span>
                             </>
                           ) : (
                             <>
-                              <CheckCircleIcon className="w-5 h-5" />
-                              Save Changes
+                              <CheckCircleIcon className="w-7 h-7" style={{ color: '#ffffff' }} />
+                              <span style={{ color: '#ffffff', fontWeight: '800' }}>Save Changes</span>
                             </>
                           )}
                         </button>
@@ -741,13 +1079,20 @@ export default function ProfilePage() {
                               name: user.name,
                               phone: user.phone || '',
                               bio: user.bio || '',
+                              subjects: user.subjects || [],
+                              interests: user.interests || [],
+                              level: user.level || 'Beginner'
                             });
                           }}
-                          className={`px-6 py-4 rounded-2xl font-bold transition-all duration-300 ${
-                            isDarkMode 
-                              ? 'bg-gray-700 hover:bg-gray-600 text-white' 
-                              : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-                          }`}
+                          style={{
+                            backgroundColor: '#dc2626',
+                            color: '#ffffff',
+                            fontWeight: '800',
+                            fontSize: '16px',
+                            minHeight: '56px',
+                            minWidth: '140px'
+                          }}
+                          className="px-8 py-4 rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl hover:bg-red-700 border-2 border-red-400"
                         >
                           Cancel
                         </button>

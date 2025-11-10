@@ -35,7 +35,7 @@ export async function PUT(request) {
     await connectDB();
 
     // Récupérer les données à mettre à jour
-    const { name, phone, bio, avatar } = await request.json();
+    const { name, phone, bio, avatar, subjects, interests, level } = await request.json();
 
     // Validation des données
     if (name && name.trim().length < 2) {
@@ -69,6 +69,9 @@ export async function PUT(request) {
     if (phone !== undefined) updates.phone = phone.trim() || null;
     if (bio !== undefined) updates.bio = bio.trim() || null;
     if (avatar !== undefined) updates.avatar = avatar;
+    if (subjects !== undefined) updates.subjects = subjects;
+    if (interests !== undefined) updates.interests = interests;
+    if (level !== undefined) updates.level = level;
 
     // Mettre à jour l'utilisateur
     const user = await User.findByIdAndUpdate(
@@ -97,6 +100,9 @@ export async function PUT(request) {
           phone: user.phone,
           bio: user.bio,
           avatar: user.avatar,
+          subjects: user.subjects,
+          interests: user.interests,
+          level: user.level,
           isVerified: user.isVerified,
           isEmailVerified: user.isEmailVerified,
           createdAt: user.createdAt,

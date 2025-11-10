@@ -2,11 +2,13 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
 import User from '@/lib/models/User';
 import Like from '@/lib/models/Like';
+import MatchingService from '@/lib/services/MatchingService';
 import jwt from 'jsonwebtoken';
 
 /**
  * GET /api/match/potentials
  * Get potential profiles to match with (excluding already swiped)
+ * Uses AI/NLP matching to sort by compatibility
  */
 export async function GET(request) {
   try {
@@ -32,6 +34,17 @@ export async function GET(request) {
 
     await connectDB();
 
+    // Get current user's profile
+    const currentUser = await User.findById(decoded.userId)
+      .select('name bio subjects interests level');
+
+    if (!currentUser) {
+      return NextResponse.json(
+        { success: false, message: 'Utilisateur non trouvé' },
+        { status: 404 }
+      );
+    }
+
     // Get all user IDs that current user already swiped (liked or disliked)
     const swipedLikes = await Like.find({ from: decoded.userId }).select('to');
     const swipedIds = swipedLikes.map(like => like.to.toString());
@@ -43,20 +56,37 @@ export async function GET(request) {
         $nin: swipedIds
       }
     })
-    .select('name email bio avatar createdAt')
-    .limit(20)
-    .sort({ createdAt: -1 });
+    .select('name email bio avatar subjects interests level createdAt')
+    .limit(50); // Get more to sort by AI
 
-    return NextResponse.json({
-      success: true,
-      potentials: potentials.map(user => ({
+    // Use AI matching to calculate compatibility and sort
+    const sortedPotentials = MatchingService.sortByCompatibility(
+      {
+        bio: currentUser.bio,
+        subjects: currentUser.subjects,
+        interests: currentUser.interests,
+        level: currentUser.level
+      },
+      potentials.map(user => ({
         id: user._id.toString(),
         name: user.name || 'Utilisateur',
         email: user.email,
         bio: user.bio || 'Pas de bio',
         avatar: user.avatar,
+        subjects: user.subjects || [],
+        interests: user.interests || [],
+        level: user.level || 'Beginner',
         createdAt: user.createdAt
       }))
+    );
+
+    // Return top 20 best matches
+    const topMatches = sortedPotentials.slice(0, 20);
+
+    return NextResponse.json({
+      success: true,
+      potentials: topMatches,
+      message: '🤖 Profils triés par IA selon votre compatibilité'
     });
 
   } catch (error) {

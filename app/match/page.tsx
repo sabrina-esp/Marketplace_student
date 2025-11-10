@@ -17,6 +17,11 @@ interface Profile {
   bio: string;
   avatar: string | null;
   createdAt: string;
+  compatibilityScore?: number;
+  matchReason?: string;
+  subjects?: string[];
+  interests?: string[];
+  level?: string;
 }
 
 interface Match {
@@ -343,24 +348,79 @@ export default function MatchPage() {
                       
                       {/* Profile Info on Image */}
                       <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                        <h2 className="text-3xl font-bold mb-2">
-                          {currentProfile.name}
-                        </h2>
+                        <div className="flex items-center justify-between mb-2">
+                          <h2 className="text-3xl font-bold">
+                            {currentProfile.name}
+                          </h2>
+                          {currentProfile.compatibilityScore !== undefined && (
+                            <div className="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full px-4 py-2 flex items-center gap-1.5 shadow-lg border-2 border-white/30">
+                              <SparklesIcon className="w-5 h-5 text-white" />
+                              <span className="text-white font-black text-lg">
+                                {currentProfile.compatibilityScore}%
+                              </span>
+                            </div>
+                          )}
+                        </div>
                         <p className="text-sm opacity-90">
                           {currentProfile.email}
                         </p>
+                        {currentProfile.level && (
+                          <span className="inline-block mt-2 px-2 py-1 bg-white/20 rounded-full text-xs">
+                            {currentProfile.level}
+                          </span>
+                        )}
                       </div>
                     </div>
 
+                    {/* AI Match Reason */}
+                    {currentProfile.matchReason && (
+                      <div className="px-6 pt-4 pb-2">
+                        <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl p-3 border-2 border-purple-200">
+                          <p className="text-sm text-purple-900 font-bold flex items-center gap-2">
+                            <SparklesIcon className="w-5 h-5 text-purple-600" />
+                            🤖 {currentProfile.matchReason}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
                     {/* Bio Section */}
-                    <div className="p-6 pb-2">
+                    <div className="px-6 pb-2 pt-2">
                       <div className="flex items-start gap-2">
                         <SparklesIcon className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" />
-                        <div>
+                        <div className="flex-1">
                           <h3 className="font-semibold text-gray-800 mb-1">Bio</h3>
                           <p className="text-gray-600 text-sm">
                             {currentProfile.bio}
                           </p>
+                          
+                          {/* Subjects */}
+                          {currentProfile.subjects && currentProfile.subjects.length > 0 && (
+                            <div className="mt-3">
+                              <p className="text-xs font-semibold text-gray-700 mb-1">Sujets:</p>
+                              <div className="flex flex-wrap gap-1">
+                                {currentProfile.subjects.slice(0, 5).map((subject, idx) => (
+                                  <span key={idx} className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
+                                    {subject}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Interests */}
+                          {currentProfile.interests && currentProfile.interests.length > 0 && (
+                            <div className="mt-2">
+                              <p className="text-xs font-semibold text-gray-700 mb-1">Intérêts:</p>
+                              <div className="flex flex-wrap gap-1">
+                                {currentProfile.interests.slice(0, 5).map((interest, idx) => (
+                                  <span key={idx} className="px-2 py-1 bg-pink-100 text-pink-700 rounded-full text-xs font-medium">
+                                    {interest}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
