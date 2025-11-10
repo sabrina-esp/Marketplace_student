@@ -88,7 +88,7 @@ const ChatInput = ({ onSend }: Props) => {
 
   return (
     <>
-      <div className="flex flex-col gap-2 border-t border-gray-200 bg-white/80 backdrop-blur px-3 py-2">
+      <div className="flex flex-col gap-2 border-t border-gray-200 bg-white/85 backdrop-blur px-3 py-3 sm:px-4">
         {attachments.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {attachments.map((a, idx) => (
@@ -114,7 +114,7 @@ const ChatInput = ({ onSend }: Props) => {
             ))}
           </div>
         )}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
           <input
             ref={fileRef}
             type="file"
@@ -126,7 +126,7 @@ const ChatInput = ({ onSend }: Props) => {
           <button
             onClick={() => fileRef.current?.click()}
             type="button"
-            className="flex items-center justify-center rounded-lg border border-gray-200 px-3 py-2 text-gray-700 hover:bg-gray-50 transition"
+            className="flex w-full items-center justify-center rounded-lg border border-gray-200 px-3 py-2 text-gray-700 transition hover:bg-gray-50 sm:w-auto"
             disabled={attachmentsLeft === 0}
           >
             📎
@@ -142,19 +142,21 @@ const ChatInput = ({ onSend }: Props) => {
             }}
             placeholder="Ask AI for recommendations..."
             rows={1}
-            className="flex-1 resize-none rounded-lg border border-gray-200 px-3 py-2 text-sm leading-relaxed focus:border-purple focus:outline-none focus:ring-2 focus:ring-purple/30"
+            className="min-h-[44px] w-full flex-1 resize-none rounded-lg border border-gray-200 px-3 py-2 text-sm leading-relaxed focus:border-purple focus:outline-none focus:ring-2 focus:ring-purple/30"
           />
           <button
             onClick={handleVoice}
             type="button"
-            className={`flex items-center justify-center rounded-lg border border-gray-200 px-3 py-2 text-gray-700 transition hover:bg-gray-50 ${isRecording ? 'border-purple text-purple-600 bg-purple/5' : ''}`}
+            className={`flex w-full items-center justify-center rounded-lg border border-gray-200 px-3 py-2 text-gray-700 transition hover:bg-gray-50 sm:w-auto ${
+              isRecording ? 'border-purple text-purple-600 bg-purple/5' : ''
+            }`}
           >
             🎤
           </button>
           <button
             onClick={handleSend}
             type="button"
-            className="rounded-lg bg-purple px-4 py-2 font-semibold text-white shadow hover:opacity-90 transition"
+            className="rounded-lg bg-purple px-4 py-2 font-semibold text-white shadow transition hover:opacity-90 sm:w-auto"
           >
             Send
           </button>
