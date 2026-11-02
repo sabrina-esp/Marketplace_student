@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
 import User from '@/lib/models/User';
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 
 /**
  * PUT /api/profile/change-password
@@ -81,8 +80,7 @@ export async function PUT(request) {
     }
 
     // Hasher et sauvegarder le nouveau mot de passe
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
+    user.password = newPassword;
     await user.save();
 
     console.log('✅ Mot de passe changé pour:', user.email);

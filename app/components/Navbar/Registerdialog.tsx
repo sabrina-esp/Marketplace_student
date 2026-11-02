@@ -54,26 +54,26 @@ const Register = () => {
             const data = await response.json()
 
             if (data.success) {
-                setMessage({ 
-                    type: 'success', 
-                    text: '🎉 Account created successfully! Welcome aboard.' 
+                setMessage({
+                    type: 'success',
+                    text: data.message || 'Account created. Check your email to verify your account.'
                 })
                 setFormData({ name: '', email: '', password: '', rememberMe: false })
-                
+
                 setTimeout(() => {
                     closeModal()
                 }, 2500)
             } else {
-                setMessage({ 
-                    type: 'error', 
-                    text: data.message || 'Registration error occurred' 
+                setMessage({
+                    type: 'error',
+                    text: data.message || 'Registration error occurred'
                 })
             }
         } catch (error) {
             console.error('Error:', error)
-            setMessage({ 
-                type: 'error', 
-                text: '❌ Server connection error' 
+            setMessage({
+                type: 'error',
+                text: '❌ Server connection error'
             })
         } finally {
             setLoading(false)
@@ -83,9 +83,9 @@ const Register = () => {
     return (
         <>
             {/* Register Button - Visible on all screens */}
-            <div className="flex items-center ml-4">
-                <button 
-                    className="relative overflow-hidden bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 sm:py-4 sm:px-8 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group" 
+            <div className="flex items-center">
+                <button
+                    className="relative overflow-hidden bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group"
                     onClick={openModal}
                     style={{
                         background: 'linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)',
@@ -94,7 +94,7 @@ const Register = () => {
                     <span className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                         <span className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></span>
                     </span>
-                    <span className="relative flex items-center justify-center gap-2 text-sm sm:text-base">
+                    <span className="relative flex items-center justify-center gap-2 text-sm">
                         <AcademicCapIcon className="w-5 h-5" />
                         <span>Register</span>
                     </span>
@@ -146,7 +146,7 @@ const Register = () => {
                                 leaveFrom="opacity-100 scale-100 rotateX(0deg)"
                                 leaveTo="opacity-0 scale-90 rotateX(20deg)"
                             >
-                                <Dialog.Panel 
+                                <Dialog.Panel
                                     className="w-full max-w-md transform overflow-hidden rounded-3xl bg-white shadow-2xl transition-all relative"
                                     style={{
                                         boxShadow: '0 30px 60px rgba(0, 0, 0, 0.3), 0 0 100px rgba(124, 58, 237, 0.5)',
@@ -173,7 +173,7 @@ const Register = () => {
                                             <div className="w-full h-full bg-gradient-to-b from-transparent via-purple-500 to-transparent"></div>
                                         </div>
                                     </div>
-                                    
+
                                     {/* Header with gradient and animated semicircles */}
                                     <div className="relative overflow-hidden" style={{
                                         background: 'linear-gradient(135deg, #7c3aed 0%, #6366f1 50%, #8b5cf6 100%)',
@@ -185,7 +185,7 @@ const Register = () => {
                                             {/* Top Left Semicircles */}
                                             <div className="absolute -top-10 -left-10 w-32 h-32 border-4 border-white/20 rounded-full animate-rotate-slow" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' }}></div>
                                             <div className="absolute -top-6 -left-6 w-24 h-24 border-4 border-white/30 rounded-full animate-rotate-reverse" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' }}></div>
-                                            
+
                                             {/* Bottom Right Semicircles */}
                                             <div className="absolute -bottom-10 -right-10 w-32 h-32 border-4 border-white/20 rounded-full animate-rotate-reverse" style={{ clipPath: 'polygon(0 50%, 100% 50%, 100% 100%, 0 100%)' }}></div>
                                             <div className="absolute -bottom-6 -right-6 w-24 h-24 border-4 border-white/30 rounded-full animate-rotate-slow" style={{ clipPath: 'polygon(0 50%, 100% 50%, 100% 100%, 0 100%)' }}></div>
@@ -200,7 +200,7 @@ const Register = () => {
                                             <div className="absolute top-1/2 left-1/4 w-2 h-2 bg-white/35 rounded-full animate-particle-5"></div>
                                             <div className="absolute top-1/3 right-1/4 w-1.5 h-1.5 bg-white/45 rounded-full animate-particle-6"></div>
                                         </div>
-                                        
+
                                         <div className="relative z-10">
                                             <div className="inline-flex items-center justify-center w-24 h-24 bg-white rounded-full mb-4 shadow-2xl transform hover:scale-110 transition-transform duration-300" style={{
                                                 boxShadow: '0 10px 40px rgba(0, 0, 0, 0.3)',
@@ -221,8 +221,8 @@ const Register = () => {
                                     <div className="p-8" style={{ background: 'linear-gradient(to bottom, #ffffff 0%, #faf5ff 100%)' }}>
                                         {message.text && (
                                             <div className={`mb-6 p-5 rounded-2xl transform transition-all duration-300 ${
-                                                message.type === 'success' 
-                                                    ? 'bg-gradient-to-r from-green-50 to-emerald-50 text-green-800 border-2 border-green-200 shadow-lg' 
+                                                message.type === 'success'
+                                                    ? 'bg-gradient-to-r from-green-50 to-emerald-50 text-green-800 border-2 border-green-200 shadow-lg'
                                                     : 'bg-gradient-to-r from-red-50 to-rose-50 text-red-800 border-2 border-red-200 shadow-lg'
                                             }`} style={{
                                                 animation: 'fadeInUp 0.5s ease-out'
@@ -364,13 +364,13 @@ const Register = () => {
                                             >
                                                 {/* Shimmer effect on hover */}
                                                 <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 animate-shimmer"></span>
-                                                
+
                                                 {/* Pulsing glow effect */}
                                                 <span className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{
                                                     background: 'radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%)',
                                                     animation: 'pulseGlow 2s ease-in-out infinite'
                                                 }}></span>
-                                                
+
                                                 <span className="relative flex items-center justify-center gap-3">
                                                     {loading ? (
                                                         <>
@@ -400,7 +400,7 @@ const Register = () => {
                                             </div>
                                             <p className="text-sm text-gray-600">
                                                 Already have an account?{' '}
-                                                <button 
+                                                <button
                                                     className="text-purple-600 font-bold hover:text-purple-700 transition-colors hover:underline decoration-2 underline-offset-2"
                                                     onClick={() => {/* Open SignIn modal */}}
                                                 >
@@ -469,7 +469,7 @@ const Register = () => {
                         transform: translateY(0);
                     }
                 }
-                
+
                 /* Rotating semicircles animations */
                 @keyframes rotate-slow {
                     0% {
@@ -479,7 +479,7 @@ const Register = () => {
                         transform: rotate(360deg);
                     }
                 }
-                
+
                 @keyframes rotate-reverse {
                     0% {
                         transform: rotate(360deg);
@@ -488,15 +488,15 @@ const Register = () => {
                         transform: rotate(0deg);
                     }
                 }
-                
+
                 .animate-rotate-slow {
                     animation: rotate-slow 20s linear infinite;
                 }
-                
+
                 .animate-rotate-reverse {
                     animation: rotate-reverse 15s linear infinite;
                 }
-                
+
                 /* Border recharge animations */
                 @keyframes border-horizontal {
                     0% {
@@ -506,7 +506,7 @@ const Register = () => {
                         transform: translateX(100%);
                     }
                 }
-                
+
                 @keyframes border-horizontal-reverse {
                     0% {
                         transform: translateX(100%);
@@ -515,7 +515,7 @@ const Register = () => {
                         transform: translateX(-100%);
                     }
                 }
-                
+
                 @keyframes border-vertical {
                     0% {
                         transform: translateY(-100%);
@@ -524,7 +524,7 @@ const Register = () => {
                         transform: translateY(100%);
                     }
                 }
-                
+
                 @keyframes border-vertical-reverse {
                     0% {
                         transform: translateY(100%);
@@ -533,23 +533,23 @@ const Register = () => {
                         transform: translateY(-100%);
                     }
                 }
-                
+
                 .animate-border-horizontal {
                     animation: border-horizontal 3s ease-in-out infinite;
                 }
-                
+
                 .animate-border-horizontal-reverse {
                     animation: border-horizontal-reverse 3s ease-in-out infinite;
                 }
-                
+
                 .animate-border-vertical {
                     animation: border-vertical 3s ease-in-out infinite;
                 }
-                
+
                 .animate-border-vertical-reverse {
                     animation: border-vertical-reverse 3s ease-in-out infinite;
                 }
-                
+
                 /* Floating particles animations */
                 @keyframes particle-1 {
                     0%, 100% {
@@ -561,7 +561,7 @@ const Register = () => {
                         opacity: 0.8;
                     }
                 }
-                
+
                 @keyframes particle-2 {
                     0%, 100% {
                         transform: translate(0, 0);
@@ -572,7 +572,7 @@ const Register = () => {
                         opacity: 0.9;
                     }
                 }
-                
+
                 @keyframes particle-3 {
                     0%, 100% {
                         transform: translate(0, 0);
@@ -583,7 +583,7 @@ const Register = () => {
                         opacity: 0.7;
                     }
                 }
-                
+
                 @keyframes particle-4 {
                     0%, 100% {
                         transform: translate(0, 0);
@@ -594,7 +594,7 @@ const Register = () => {
                         opacity: 0.8;
                     }
                 }
-                
+
                 @keyframes particle-5 {
                     0%, 100% {
                         transform: translate(0, 0);
@@ -605,7 +605,7 @@ const Register = () => {
                         opacity: 0.75;
                     }
                 }
-                
+
                 @keyframes particle-6 {
                     0%, 100% {
                         transform: translate(0, 0);
@@ -616,31 +616,31 @@ const Register = () => {
                         opacity: 0.85;
                     }
                 }
-                
+
                 .animate-particle-1 {
                     animation: particle-1 4s ease-in-out infinite;
                 }
-                
+
                 .animate-particle-2 {
                     animation: particle-2 3.5s ease-in-out infinite;
                     animation-delay: 0.5s;
                 }
-                
+
                 .animate-particle-3 {
                     animation: particle-3 4.5s ease-in-out infinite;
                     animation-delay: 1s;
                 }
-                
+
                 .animate-particle-4 {
                     animation: particle-4 3.8s ease-in-out infinite;
                     animation-delay: 1.5s;
                 }
-                
+
                 .animate-particle-5 {
                     animation: particle-5 4.2s ease-in-out infinite;
                     animation-delay: 0.8s;
                 }
-                
+
                 .animate-particle-6 {
                     animation: particle-6 3.6s ease-in-out infinite;
                     animation-delay: 1.2s;

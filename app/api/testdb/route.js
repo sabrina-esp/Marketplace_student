@@ -1,30 +1,14 @@
 import { connectDB } from '@/lib/db/mongodb';
-import mongoose from "mongoose";
-
-// Define a test schema (optional)
-const userSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-});
-
-// Prevent model overwrite during hot reload
-const User = mongoose.models.User || mongoose.model("User", userSchema);
+import { NextResponse } from 'next/server';
 
 export async function POST() {
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ message: 'Not found' }, { status: 404 });
+  }
   try {
-    console.log("Connecting to DB...");
     await connectDB();
-
-    // Insert a test document (MongoDB will create the DB + collection)
-    const user = await User.create({ name: "Elyess", email: "elyess@example.com" });
-
-    return new Response(JSON.stringify({ message: "User added!", user }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (error) {
-    console.error("❌ Database error:", error);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    return NextResponse.json({ success: true, message: 'Database connected' });
+  } catch {
+    return NextResponse.json({ success: false, message: 'Database unavailable' }, { status: 503 });
   }
 }
-

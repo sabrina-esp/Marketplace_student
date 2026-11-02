@@ -1,15 +1,10 @@
 // Service Worker for Marketplace Student PWA
-const CACHE_NAME = 'marketplace-v1';
+const CACHE_NAME = 'marketplace-v4-public-only';
 const OFFLINE_URL = '/offline';
 
 // Files to cache immediately
 const PRECACHE_ASSETS = [
-  '/',
   '/offline',
-  '/dashboard',
-  '/profile',
-  '/settings',
-  '/help',
   '/manifest.json',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png'
@@ -45,57 +40,50 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch event - serve from cache, fallback to network
+// Cache only public assets. API responses and authenticated requests must
+// always reach the server, even when a previous user used the same browser.
 self.addEventListener('fetch', (event) => {
-  // Skip non-GET requests
-  if (event.request.method !== 'GET') return;
+  const request = event.request;
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin) return;
 
-  // Skip chrome extensions and external requests
-  if (!event.request.url.startsWith(self.location.origin)) return;
+  if (url.pathname === '/api' || url.pathname.startsWith('/api/') ||
+      request.headers.has('authorization')) {
+    event.respondWith(fetch(request, { cache: 'no-store' }));
+    return;
+  }
 
-  event.respondWith(
-    caches.match(event.request)
-      .then((cachedResponse) => {
-        if (cachedResponse) {
-          // Return cached version and update cache in background
-          fetch(event.request)
-            .then((networkResponse) => {
-              if (networkResponse && networkResponse.status === 200) {
-                caches.open(CACHE_NAME)
-                  .then((cache) => cache.put(event.request, networkResponse));
-              }
-            })
-            .catch(() => {});
-          return cachedResponse;
-        }
+  if (request.method !== 'GET') return;
 
-        // Not in cache, fetch from network
-        return fetch(event.request)
-          .then((networkResponse) => {
-            // Cache successful responses
-            if (networkResponse && networkResponse.status === 200) {
-              const responseClone = networkResponse.clone();
-              caches.open(CACHE_NAME)
-                .then((cache) => cache.put(event.request, responseClone));
-            }
-            return networkResponse;
-          })
-          .catch(() => {
-            // Network failed, try to return offline page for navigation requests
-            if (event.request.mode === 'navigate') {
-              return caches.match(OFFLINE_URL);
-            }
-            // For other requests, return a basic error response
-            return new Response('Offline - Content not available', {
-              status: 503,
-              statusText: 'Service Unavailable',
-              headers: new Headers({
-                'Content-Type': 'text/plain'
-              })
-            });
-          });
-      })
-  );
+  if (url.pathname === '/manifest.json') {
+    event.respondWith(fetch(request, { cache: 'no-store' }));
+    return;
+  }
+
+  // Never cache page HTML or Next.js route data: it may contain user data.
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request, { cache: 'no-store' })
+        .catch(() => caches.match(OFFLINE_URL))
+    );
+    return;
+  }
+
+  const publicAsset = url.pathname.startsWith('/_next/static/') ||
+    url.pathname.startsWith('/icons/') || url.pathname.startsWith('/brand/');
+  if (!publicAsset) return;
+
+  event.respondWith((async () => {
+    const cache = await caches.open(CACHE_NAME);
+    const cached = await cache.match(request);
+    if (cached) return cached;
+    const response = await fetch(request);
+    if (response.ok && response.type !== 'opaque' &&
+        !/no-store|private/i.test(response.headers.get('cache-control') || '')) {
+      await cache.put(request, response.clone());
+    }
+    return response;
+  })());
 });
 
 // Push notification event

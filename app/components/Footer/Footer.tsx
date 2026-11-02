@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BrandLogo from "../BrandLogo";
 
 // MIDDLE LINKS DATA
 interface ProductType {
@@ -29,7 +30,7 @@ const footer = () => {
                     {/* COLUMN-1 */}
 
                     <div className='col-span-4'>
-                        <img src={'/assets/logo/Logo2.svg'} alt="logo" className='pb-4' />
+                        <BrandLogo variant="dark" className="mb-4" />
                         <h3 className='text-white text-lg font-medium leading-9 mb-4 lg:mb-20'> Level up your skills, and get dream <br /> job with passion. </h3>
                         <div className='flex gap-4'>
                             <Link href="/"><img src={'/assets/footer/insta.svg'} alt="instagram" className='footer-icons' /></Link>

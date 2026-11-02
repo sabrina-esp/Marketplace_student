@@ -438,7 +438,7 @@ export default function PrivacyPage() {
                       <h3 className="text-2xl font-bold text-white">Change Password</h3>
                     </div>
                     <p className="text-purple-100 text-sm">
-                      We'll send you a secure reset link via email
+                      We&apos;ll send you a secure reset link via email
                     </p>
                   </div>
                   <button 
@@ -549,7 +549,7 @@ export default function PrivacyPage() {
                         💡 How it works
                       </p>
                       <p className={`text-xs leading-relaxed ${isDarkMode ? 'text-blue-400' : 'text-blue-700'}`}>
-                        You'll receive an email with a secure link to reset your password. The link will expire in 1 hour for security.
+                        You&apos;ll receive an email with a secure link to reset your password. The link will expire in 1 hour for security.
                       </p>
                     </div>
                   </div>

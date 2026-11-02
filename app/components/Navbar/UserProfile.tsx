@@ -1,29 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
 
 export default function UserProfile() {
-  const [user, setUser] = useState<any>(null);
+  const user = useCurrentUser();
   const [showMenu, setShowMenu] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      try {
-        setUser(JSON.parse(userData));
-      } catch (error) {
-        console.error('Erreur:', error);
-      }
-    }
-  }, []);
 
   const handleLogout = () => {
     if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
       localStorage.removeItem('user');
       localStorage.removeItem('token');
-      setUser(null);
       window.dispatchEvent(new Event('userLoggedOut'));
       router.push('/');
     }

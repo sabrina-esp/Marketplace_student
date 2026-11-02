@@ -1,3 +1,6 @@
+const palette = require('tailwindcss/colors');
+const deprecatedColors = new Set(['lightBlue', 'warmGray', 'trueGray', 'coolGray', 'blueGray']);
+const colors = Object.fromEntries(Object.keys(palette).filter((key) => !deprecatedColors.has(key)).map((key) => [key, palette[key]]));
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -10,22 +13,23 @@ module.exports = {
   ],
   theme: {
     colors: {
+      ...colors,
       transparent: 'transparent',
       current: 'currentColor',
       'white': '#ffffff',
       'black': '#000000',
-      "purple": '#611F69',
+      "purple": { ...colors.purple, DEFAULT: '#611F69' },
       'lightgrey': '#8C8C8C',
-      'green': '#6B9F36',
+      'green': { ...colors.green, DEFAULT: '#6B9F36' },
       'lightpink': '#FCF6EF',
-      'orange': '#F9CD92',
+      'orange': { ...colors.orange, DEFAULT: '#F9CD92' },
       'grey500': '#ECECEC',
       'bgpink': "#FCF5EF",
       'bgpurple': '#451F49',
       'emailbg': '#6a4c6d',
       'offwhite': ' #FDFDFD',
       'offblack' :'#333333',
-      'red' : '#FF605C'
+      'red': { ...colors.red, DEFAULT: '#FF605C' }
     },
     fontFamily: {
       'inter': ['Inter', "sans-serif"]

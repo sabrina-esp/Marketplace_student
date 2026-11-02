@@ -1,16 +1,7 @@
 import { NextResponse } from 'next/server';
-import * as webpush from 'web-push';
 import * as jwt from 'jsonwebtoken';
 import connectDB from '@/lib/db/mongodb';
 import User from '@/lib/models/User';
-
-// Configure web-push with VAPID keys
-// Generate keys with: npx web-push generate-vapid-keys
-webpush.setVapidDetails(
-  'mailto:karouielyess@gmail.com',
-  process.env.VAPID_PUBLIC_KEY || '',
-  process.env.VAPID_PRIVATE_KEY || ''
-);
 
 export async function POST(req: Request) {
   try {

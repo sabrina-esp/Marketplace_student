@@ -408,7 +408,7 @@ export default function DemoPage() {
                 <div className="text-center">
                   <UserGroupIcon className="w-24 h-24 mx-auto mb-4 text-purple-600" />
                   <p className="text-lg font-semibold text-gray-700">
-                    Invitations d'amis et croissance virale
+                    Invitations d&apos;amis et croissance virale
                   </p>
                 </div>
               )}

@@ -27,6 +27,13 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'No subscription found' }, { status: 404 });
     }
 
+    const publicKey = process.env.VAPID_PUBLIC_KEY;
+    const privateKey = process.env.VAPID_PRIVATE_KEY;
+    if (!publicKey || !privateKey) {
+      return NextResponse.json({ error: 'Push notifications are not configured' }, { status: 503 });
+    }
+    webpush.setVapidDetails('mailto:karouielyess@gmail.com', publicKey, privateKey);
+
     // Send test notification
     const payload = JSON.stringify({
       title: '🎉 Test Notification',

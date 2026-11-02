@@ -5,11 +5,11 @@ import Dropdowntwo from './Dropdowntwo';
 
 const Banner = () => {
     return (
-        <main className='banner-image'>
+        <section className='banner-image'>
             <div className="relative px-6 lg:px-8">
-                <div className="mx-auto max-w-5xl pt-16 sm:pt-40 sm:pb-24">
+                <div className="mx-auto max-w-5xl py-16 sm:py-24">
                     <div className="text-center">
-                        <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-75px md:4px">
+                        <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl lg:text-75px">
                             Advance your engineering <br /> skills with our courses
                         </h1>
                         <p className="mt-6 text-lg leading-8 text-black">
@@ -59,25 +59,25 @@ const Banner = () => {
                     {/* DROPDOWN BUTTONS */}
 
 
-                    <div className="mx-auto max-w-4xl mt-24 pt-6 pb-8 px-6 lg:max-w-4xl lg:px-8 bg-white rounded-lg boxshadow">
-                        <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-8 xl:gap-x-8">
-                            <div className="col-span-3">
+                    <div className="mx-auto max-w-4xl mt-12 sm:mt-20 pt-6 pb-8 px-6 lg:max-w-4xl lg:px-8 bg-white rounded-lg boxshadow">
+                        <div className="grid grid-cols-1 gap-y-10 gap-x-6 md:grid-cols-[1fr_1fr_auto] xl:gap-x-8">
+                            <div className="min-w-0">
                                 <Dropdownone />
                             </div>
-                            <div className="col-span-3">
+                            <div className="min-w-0">
                                 <Dropdowntwo />
                             </div>
-                            <div className="col-span-3 sm:col-span-2 mt-2">
-                                <button className="bg-purple w-full hover:bg-pruple text-white font-bold py-4 px-3 rounded">
+                            <div className="mt-2 flex items-end">
+                                <a href="#courses-section" className="block text-center bg-purple w-full hover:bg-purple-800 text-white font-bold py-4 px-3 rounded">
                                     Start
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
 
                 </div>
             </div>
-        </main>
+        </section>
     )
 }
 

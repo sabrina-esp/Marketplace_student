@@ -93,11 +93,11 @@ const SigninDialog = () => {
 
     return (
         <>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                <div className="hidden md:block">
+            <div className="flex items-center">
+                <div className="block">
                     <button
                         type="button"
-                        className="text-15px font-medium space-links"
+                        className="rounded-xl px-4 py-3 text-sm font-semibold text-purple transition-colors hover:bg-purple/5"
                         onClick={openModal}
                     >
                         Sign In

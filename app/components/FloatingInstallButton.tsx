@@ -81,7 +81,7 @@ export default function FloatingInstallButton() {
       <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3 animate-bounce-slow">
         {/* Info Badge */}
         <div className="bg-white px-4 py-2 rounded-full shadow-lg text-sm font-medium text-green-600 hidden sm:block">
-          Télécharger l'app! �
+          Télécharger l&apos;app! �
         </div>
 
         {/* Main Button */}
@@ -124,7 +124,7 @@ export default function FloatingInstallButton() {
                   <ArrowDownTrayIcon className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">Télécharger l'App</h3>
+                  <h3 className="text-xl font-bold text-gray-900">Télécharger l&apos;App</h3>
                   <p className="text-sm text-gray-500">Meilleure expérience</p>
                 </div>
               </div>
@@ -158,7 +158,7 @@ export default function FloatingInstallButton() {
                         2
                       </span>
                       <div className="flex-1">
-                        <p className="font-semibold text-gray-900">Select "Add to Home Screen"</p>
+                        <p className="font-semibold text-gray-900">Select &quot;Add to Home Screen&quot;</p>
                         <p className="text-sm text-gray-600">Scroll down if needed</p>
                       </div>
                     </li>
@@ -167,7 +167,7 @@ export default function FloatingInstallButton() {
                         3
                       </span>
                       <div className="flex-1">
-                        <p className="font-semibold text-gray-900">Tap "Add"</p>
+                        <p className="font-semibold text-gray-900">Tap &quot;Add&quot;</p>
                         <p className="text-sm text-gray-600">App will be on your home screen</p>
                       </div>
                     </li>

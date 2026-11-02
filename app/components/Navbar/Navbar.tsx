@@ -1,116 +1,5 @@
-// import { Disclosure } from '@headlessui/react';
-// import { Bars3Icon } from '@heroicons/react/24/outline';
-// import Link from 'next/link';
-// import React from 'react';
-// import Drawer from "./Drawer";
-// import Drawerdata from "./Drawerdata";
-// import Signdialog from "./Signdialog";
-// import Registerdialog from "./Registerdialog";
-// import Contactus from "./Contactus";
-// import { FaHome, FaBookOpen, FaUserGraduate, FaComments, FaUsers, FaEnvelope } from 'react-icons/fa';
-
-// interface NavigationItem {
-//     name: string;
-//     href: string;
-//     current: boolean;
-//     icon: React.ReactElement;
-// }
-
-// const navigation: NavigationItem[] = [
-//     { name: 'Home', href: '/', current: true, icon: <FaHome className="mr-2" /> },
-//     { name: 'Courses', href: '#courses-section', current: false, icon: <FaBookOpen className="mr-2" /> },
-//     { name: 'Mentors', href: '#mentors-section', current: false, icon: <FaUserGraduate className="mr-2" /> },
-//     { name: 'Testimonial', href: '#testimonial-section', current: false, icon: <FaComments className="mr-2" /> },
-//     { name: 'Join', href: '#join-section', current: false, icon: <FaUsers className="mr-2" /> },
-// ]
-
-// function classNames(...classes: string[]) {
-//     return classes.filter(Boolean).join(' ')
-// }
-
-// const Navbar = () => {
-
-//     const [isOpen, setIsOpen] = React.useState(false);
-
-//     return (
-//         <Disclosure as="nav" className="bg-lightpink navbar">
-//             <>
-//                 <div className="mx-auto max-w-7xl px-6 lg:px-8">
-//                     <div className="relative flex h-20 items-center justify-between">
-//                         <div className="flex flex-1 items-center sm:items-stretch sm:justify-start">
-
-//                             {/* LOGO */}
-
-//                             <div className="flex flex-shrink-0 items-center">
-//                                 <FaUserGraduate
-//                                     className="block h-8 w-8 lg:hidden text-purple"
-//                                 />
-//                                 <FaUserGraduate
-//                                     className="hidden h-12 w-12 lg:block text-purple"
-//                                 />
-//                             </div>
-
-//                             {/* LINKS */}
-
-//                             <div className="hidden sm:ml-14 md:block">
-//                                 <div className="flex space-x-4">
-//                                     {navigation.map((item) => (
-//                                         <Link
-//                                             key={item.name}
-//                                             href={item.href}
-//                                             className={classNames(
-//                                                 item.current ? ' text-purple' : 'hover:text-purple',
-//                                                 'px-3 py-4 text-15px font-medium space-links flex items-center'
-//                                             )}
-//                                             aria-current={item.href ? 'page' : undefined}
-//                                         >
-//                                             {item.icon}
-//                                             {item.name}
-//                                         </Link>
-//                                     ))}
-//                                     <span className="flex items-center px-3 py-4 text-15px space-links">
-//                                         <FaEnvelope className="mr-2" />
-//                                         <Contactus />
-//                                     </span>
-//                                 </div>
-//                             </div>
-//                         </div>
-
-//                         {/* SIGNIN DIALOG */}
-
-//                         <Signdialog />
-
-
-//                         {/* REGISTER DIALOG */}
-
-//                         <Registerdialog />
-
-
-//                         {/* DRAWER FOR MOBILE VIEW */}
-
-//                         {/* DRAWER ICON */}
-
-//                         <div className='block md:hidden'>
-//                             <Bars3Icon className="block h-6 w-6" aria-hidden="true" onClick={() => setIsOpen(true)} />
-//                         </div>
-
-//                         {/* DRAWER LINKS DATA */}
-
-//                         <Drawer isOpen={isOpen} setIsOpen={setIsOpen}>
-//                             <Drawerdata />
-//                         </Drawer>
-
-//                     </div>
-//                 </div>
-//             </>
-//         </Disclosure>
-//     )
-// }
-
-// export default Navbar;
 'use client';
 
-import { Disclosure } from '@headlessui/react';
 import { Bars3Icon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import React from 'react';
@@ -120,27 +9,11 @@ import Signdialog from "./Signdialog";
 import Registerdialog from "./Registerdialog";
 import UserProfile from "./UserProfile";
 import InstallButton from "./InstallButton";
-import { FaHome, FaBookOpen, FaUserGraduate, FaComments, FaUsers, FaUser, FaHeart } from 'react-icons/fa';
-import { LayoutDashboard } from 'lucide-react';
+import BrandLogo from '../BrandLogo';
 
-interface NavigationItem {
-    name: string;
-    href: string;
-    current: boolean;
-    icon: React.ReactNode;
-    requireAuth?: boolean;
-}
-
-const navigation: NavigationItem[] = [
-    { name: 'Home', href: '/', current: true, icon: <FaHome className="mr-2" /> },
-    { name: 'Courses', href: '#courses-section', current: false, icon: <FaBookOpen className="mr-2" /> },
-    { name: 'Mentors', href: '#mentors-section', current: false, icon: <FaUserGraduate className="mr-2" /> },
-    { name: 'Testimonial', href: '#testimonial-section', current: false, icon: <FaComments className="mr-2" /> },
-    { name: 'Join', href: '#join-section', current: false, icon: <FaUsers className="mr-2" /> },
-    { name: 'Match', href: '/match', current: false, icon: <FaHeart className="mr-2 text-pink-500" />, requireAuth: true },
-    { name: 'Dashboard', href: '/dashboard', current: false, icon: <LayoutDashboard className="mr-2 w-4 h-4" />, requireAuth: true },
-    { name: 'Profile', href: '/profile', current: false, icon: <FaUser className="mr-2" />, requireAuth: true },
-]
+import { navigation } from './navigation';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
+import { usePathname } from 'next/navigation';
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -148,73 +21,44 @@ function classNames(...classes: string[]) {
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = React.useState(false);
-    const [user, setUser] = React.useState<any>(null);
+    const user = useCurrentUser();
+    const pathname = usePathname();
 
     React.useEffect(() => {
-        const userData = localStorage.getItem('user');
-        if (userData) {
-            try {
-                setUser(JSON.parse(userData));
-            } catch (error) {
-                console.error('Erreur:', error);
-            }
-        }
-
-        const handleUserLogin = () => {
-            const userData = localStorage.getItem('user');
-            if (userData) {
-                setUser(JSON.parse(userData));
-            }
-        };
-
-        const handleUserLogout = () => {
-            setUser(null);
-        };
-
-        window.addEventListener('userLoggedIn', handleUserLogin);
-        window.addEventListener('userLoggedOut', handleUserLogout);
-
-        return () => {
-            window.removeEventListener('userLoggedIn', handleUserLogin);
-            window.removeEventListener('userLoggedOut', handleUserLogout);
-        };
+        const desktop = window.matchMedia('(min-width: 1280px)');
+        const closeOnDesktop = () => { if (desktop.matches) setIsOpen(false); };
+        desktop.addEventListener('change', closeOnDesktop);
+        return () => desktop.removeEventListener('change', closeOnDesktop);
     }, []);
 
     return (
-        <Disclosure as="nav" className="bg-lightpink navbar">
+        <nav aria-label="Main navigation" className="navbar border-b border-purple/10 bg-white/95 backdrop-blur-xl">
             <>
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                    <div className="relative flex h-20 items-center justify-between">
-                        <div className="flex flex-1 items-center sm:items-stretch sm:justify-start">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div className="relative flex h-20 items-center justify-between gap-4">
+                        <div className="flex min-w-0 items-center gap-6">
 
                             {/* LOGO */}
-                            <div className="flex flex-shrink-0 items-center">
-                                <FaUserGraduate
-                                    className="block h-8 w-8 lg:hidden text-purple"
-                                />
-                                <FaUserGraduate
-                                    className="hidden h-12 w-12 lg:block text-purple"
-                                />
-                            </div>
+                            <BrandLogo />
 
                             {/* LINKS */}
-                            <div className="hidden sm:ml-14 md:block">
-                                <div className="flex space-x-4">
+                            <div className="hidden xl:block">
+                                <div className="flex gap-1">
                                     {navigation.map((item) => {
                                         // Hide auth-required items if not logged in
                                         if (item.requireAuth && !user) return null;
-                                        
+
                                         return (
                                             <Link
                                                 key={item.name}
                                                 href={item.href}
                                                 className={classNames(
-                                                    item.current ? ' text-purple' : 'hover:text-purple',
-                                                    'px-3 py-4 text-15px font-medium space-links flex items-center'
+                                                    pathname === item.href ? 'bg-purple/10 text-purple' : 'text-gray-600 hover:bg-purple/5 hover:text-purple',
+                                                    'rounded-xl px-2.5 py-3 text-sm font-medium whitespace-nowrap flex items-center transition-colors'
                                                 )}
-                                                aria-current={item.href ? 'page' : undefined}
+                                                aria-current={pathname === item.href ? 'page' : undefined}
                                             >
-                                                {item.icon}
+
                                                 {item.name}
                                             </Link>
                                         );
@@ -223,10 +67,10 @@ const Navbar = () => {
                             </div>
                         </div>
 
-                        <div className="hidden md:flex items-center gap-4">
+                        <div className="hidden xl:flex shrink-0 items-center gap-3">
                             {/* Install PWA Button */}
                             <InstallButton />
-                            
+
                             {user ? (
                                 <UserProfile />
                             ) : (
@@ -238,9 +82,9 @@ const Navbar = () => {
                         </div>
 
                         {/* DRAWER FOR MOBILE VIEW */}
-                        <div className='block md:hidden'>
-                            <Bars3Icon className="block h-6 w-6" aria-hidden="true" onClick={() => setIsOpen(true)} />
-                        </div>
+                        <button type="button" className="xl:hidden flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-purple/10 text-purple transition-colors hover:bg-purple/5" aria-label="Open navigation" aria-expanded={isOpen} onClick={() => setIsOpen(true)}>
+                            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+                        </button>
 
                         <Drawer isOpen={isOpen} setIsOpen={setIsOpen}>
                             <Drawerdata />
@@ -249,7 +93,7 @@ const Navbar = () => {
                     </div>
                 </div>
             </>
-        </Disclosure>
+        </nav>
     )
 }
 

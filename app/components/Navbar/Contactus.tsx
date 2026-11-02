@@ -1,3 +1,4 @@
+import BrandLogo from "../BrandLogo";
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 
@@ -81,11 +82,7 @@ const Contactusform = () => {
                                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
 
                                     <div className="py-8 lg:py-8 px-4 mx-auto max-w-screen-md">
-                                        <img
-                                            className="mx-auto h-12 w-auto"
-                                            src="/assets/logo/Logo.svg"
-                                            alt="Your Company"
-                                        />
+                                        <div className="flex justify-center"><BrandLogo /></div>
                                         <p className="mb-8 lg:mb-16 mt-8 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">Contact us now? Want to send us a feedback?</p>
                                         <form action="#" className="space-y-8" onSubmit={handleSubmit}>
                                             <div>

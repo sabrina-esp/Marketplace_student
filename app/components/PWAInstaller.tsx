@@ -9,18 +9,19 @@ export default function PWAInstaller() {
   const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
-    // Register service worker
+    // Register even when this dynamically loaded component mounts after window.load.
+    const registerServiceWorker = () => {
+      navigator.serviceWorker
+        .register('/sw.js', { updateViaCache: 'none' })
+        .then((registration) => registration.update())
+        .catch((error) => console.error('Service Worker registration failed:', error));
+    };
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker
-          .register('/sw.js')
-          .then((registration) => {
-            console.log('✅ Service Worker registered:', registration);
-          })
-          .catch((error) => {
-            console.error('❌ Service Worker registration failed:', error);
-          });
-      });
+      if (document.readyState === 'complete') {
+        registerServiceWorker();
+      } else {
+        window.addEventListener('load', registerServiceWorker, { once: true });
+      }
     }
 
     // Check if already installed
@@ -55,6 +56,7 @@ export default function PWAInstaller() {
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('load', registerServiceWorker);
     };
   }, []);
 
@@ -160,7 +162,7 @@ export default function PWAInstaller() {
                     2
                   </span>
                   <span className="text-gray-700">
-                    Scroll down and tap <strong>"Add to Home Screen"</strong>
+                    Scroll down and tap <strong>&quot;Add to Home Screen&quot;</strong>
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
@@ -168,7 +170,7 @@ export default function PWAInstaller() {
                     3
                   </span>
                   <span className="text-gray-700">
-                    Tap <strong>"Add"</strong> to install the app
+                    Tap <strong>&quot;Add&quot;</strong> to install the app
                   </span>
                 </li>
               </ol>

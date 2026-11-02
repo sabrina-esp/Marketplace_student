@@ -66,13 +66,13 @@
 EMAIL_HOST=smtp.gmail.com
 EMAIL_PORT=587
 EMAIL_USER=karouielyess@gmail.com
-EMAIL_PASSWORD=zzia rcek nail qbqk  # ✅ Déjà configuré
+EMAIL_PASSWORD=YOUR_GMAIL_APP_PASSWORD
 
 # App URL
 NEXT_PUBLIC_APP_URL=http://localhost:3011
 
 # JWT Secret
-JWT_SECRET=marketplace_secret_key_2024_super_securise
+JWT_SECRET=YOUR_RANDOM_JWT_SECRET
 ```
 
 ### Configuration Gmail App Password

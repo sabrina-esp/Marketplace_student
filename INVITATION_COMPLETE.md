@@ -62,7 +62,7 @@ Sujet: [Votre Nom] invited you to join Marketplace - Get 20% OFF!
 
 ```bash
 EMAIL_USER=karouielyess@gmail.com
-EMAIL_PASSWORD=zzia rcek nail qbqk  # Gmail App Password
+EMAIL_PASSWORD=YOUR_GMAIL_APP_PASSWORD
 NEXT_PUBLIC_APP_URL=http://localhost:3011
 ```
 

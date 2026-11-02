@@ -72,7 +72,7 @@ export default function OfflinePage() {
         </button>
 
         <p className="mt-6 text-sm text-gray-500">
-          Connection will be restored automatically when you're back online
+          Connection will be restored automatically when you&apos;re back online
         </p>
       </div>
     </div>

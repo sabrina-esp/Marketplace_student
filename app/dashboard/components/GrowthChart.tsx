@@ -19,23 +19,23 @@ const GrowthChart: React.FC<GrowthChartProps> = ({ calendarData }) => {
         <h2 className="text-xl font-bold text-gray-900">Platform Growth</h2>
         <p className="text-sm text-gray-500 mt-1">Overall progress</p>
       </div>
-      
+
       <div className="flex items-center justify-center mb-6">
         <div className="relative">
           <ResponsiveContainer width={200} height={200}>
-            <RadialBarChart 
-              cx="50%" 
-              cy="50%" 
-              innerRadius="70%" 
-              outerRadius="100%" 
+            <RadialBarChart
+              cx="50%"
+              cy="50%"
+              innerRadius="70%"
+              outerRadius="100%"
               data={growthData}
               startAngle={90}
               endAngle={-270}
             >
               <RadialBar
-                minAngle={15}
+
                 background
-                clockWise
+
                 dataKey="value"
                 cornerRadius={10}
               />

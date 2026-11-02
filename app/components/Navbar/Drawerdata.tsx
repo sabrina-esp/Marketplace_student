@@ -2,48 +2,26 @@ import React from "react";
 import Link from "next/link";
 import Contactus from './Contactus';
 
-interface NavigationItem {
-  name: string;
-  href: string;
-  current: boolean;
-  emoji?: string;
-  requireAuth?: boolean;
-}
-
-const navigation: NavigationItem[] = [
-  { name: 'Home', href: '/', current: true },
-  { name: 'Courses', href: '#courses-section', current: false },
-  { name: 'Mentors', href: '#mentors-section', current: false },
-  { name: 'Testimonial', href: '#testimonial-section', current: false },
-  { name: 'Join', href: '#join-section', current: false },
-  { name: '💖 Match', href: '/match', current: false, requireAuth: true },
-  { name: '📊 Dashboard', href: '/dashboard', current: false, requireAuth: true },
-  { name: '👤 Profile', href: '/profile', current: false, requireAuth: true },
-]
+import { navigation } from './navigation';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
+import { usePathname } from 'next/navigation';
+import Signdialog from './Signdialog';
+import Registerdialog from './Registerdialog';
+import UserProfile from './UserProfile';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 const Data = () => {
-  const [user, setUser] = React.useState<any>(null);
-
-  React.useEffect(() => {
-    const userData = localStorage.getItem('user');
-    if (userData) {
-      try {
-        setUser(JSON.parse(userData));
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    }
-  }, []);
+  const user = useCurrentUser();
+  const pathname = usePathname();
 
   return (
     <div className="rounded-md max-w-sm w-full mx-auto">
       <div className="flex-1 space-y-4 py-1">
         <div className="sm:block">
-          <div className="space-y-1 px-5 pt-2 pb-3">
+          <div className="space-y-2 pt-2 pb-3">
             {navigation.map((item) => {
               // Hide auth-required items if not logged in
               if (item.requireAuth && !user) return null;
@@ -53,10 +31,10 @@ const Data = () => {
                   key={item.name}
                   href={item.href}
                   className={classNames(
-                    item.current ? 'bg-gray-900 text-purple' : 'text-black hover:bg-gray-700 hover:text-purple',
-                    'block  py-2 rounded-md text-base font-medium'
+                    pathname === item.href ? 'bg-purple-50 text-purple' : 'text-black hover:bg-purple-50 hover:text-purple',
+                    'block px-4 py-3 rounded-xl text-base font-medium transition-colors'
                   )}
-                  aria-current={item.current ? 'page' : undefined}
+                  aria-current={pathname === item.href ? 'page' : undefined}
                 >
                   {item.name}
                 </Link>
@@ -64,12 +42,7 @@ const Data = () => {
             })}
             <Contactus />
             <div className="mt-4"></div>
-            <button className="bg-white w-full hover:bg-purple hover:text-white text-black border border-purple font-medium py-2 px-4 rounded">
-              Sign In
-            </button>
-            <button className="bg-purple w-full hover:bg-purple hover:text-white text-white font-medium my-2 py-2 px-4 rounded">
-              Register
-            </button>
+            {user ? <UserProfile /> : <div className="flex flex-wrap gap-3"><Signdialog /><Registerdialog /></div>}
           </div>
         </div>
       </div>

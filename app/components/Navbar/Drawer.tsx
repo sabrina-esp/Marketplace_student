@@ -1,55 +1,33 @@
-import React, { ReactNode } from "react";
-import { XMarkIcon } from '@heroicons/react/24/outline'
+import { Fragment, ReactNode } from 'react';
+import BrandLogo from '../BrandLogo';
+import { Dialog, Transition } from '@headlessui/react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 interface DrawerProps {
-    children: ReactNode;
-    isOpen: boolean;
-    setIsOpen: (isOpen: boolean) => void;
+  children: ReactNode;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
-const Drawer = ({ children, isOpen, setIsOpen }: DrawerProps) => {
-
-    return (
-        <main
-            className={
-                " fixed overflow-hidden z-10 bg-gray-900 bg-opacity-25 inset-0 transform ease-in-out " +
-                (isOpen
-                    ? " transition-opacity opacity-100 duration-500 translate-x-0  "
-                    : " transition-all delay-500 opacity-0 -translate-x-full  ")
-            }
-        >
-            <section
-        className={
-            "w-340px max-w-lg left-0 absolute bg-white h-full shadow-xl delay-400 duration-500 ease-in-out transition-all transform " +
-            (isOpen ? "translate-x-0" : "-translate-x-full")
-        }
-    >
- 
-                <article className="relative w-340px max-w-lg pb-10 flex flex-col space-y-6 h-full">
-                    <header className="p-4 flex items-center"><img
-                        className="h-30px w-30px mx-auto"
-                        src={"/assets/logo/Logo.svg"}
-                        alt="Courses-Logo"
-                        onClick={() => {
-                            setIsOpen(false);
-                        }}
-                    /><XMarkIcon className="block h-6 w-6" onClick={() => {
-                        setIsOpen(false);
-                    }} />
-                    </header>
-                    <div onClick={() => {
-                        setIsOpen(false);
-                    }}>{children}</div>
-                </article>
-            </section>
-            <section
-                className=" w-screen h-full cursor-pointer "
-                onClick={() => {
-                    setIsOpen(false);
-                }}
-            ></section>
-        </main>
-    );
+export default function Drawer({ children, isOpen, setIsOpen }: DrawerProps) {
+  return (
+    <Transition show={isOpen} as={Fragment}>
+      <Dialog onClose={() => setIsOpen(false)} className="relative z-50">
+        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed inset-0 flex justify-end">
+          <Dialog.Panel className="w-full max-w-sm overflow-y-auto bg-white p-5 shadow-xl">
+            <div className="mb-6 flex items-center justify-between">
+              <Dialog.Title as="div"><BrandLogo /></Dialog.Title>
+              <button type="button" aria-label="Close navigation" className="flex h-11 w-11 items-center justify-center rounded-xl bg-purple/5 text-purple" onClick={() => setIsOpen(false)}>
+                <XMarkIcon className="h-6 w-6" />
+              </button>
+            </div>
+            <div onClick={(event) => {
+              if ((event.target as HTMLElement).closest('a')) setIsOpen(false);
+            }}>{children}</div>
+          </Dialog.Panel>
+        </div>
+      </Dialog>
+    </Transition>
+  );
 }
-
-export default Drawer;

@@ -241,7 +241,7 @@ export default function MatchPage() {
           <div className="bg-white rounded-3xl p-8 max-w-sm mx-4 text-center animate-scaleIn">
             <div className="text-6xl mb-4 animate-bounce">🎉</div>
             <h2 className="text-3xl font-bold text-purple-600 mb-2">
-              C'est un Match !
+              Cest un Match !
             </h2>
             <p className="text-gray-600 mb-4">
               Vous et <strong>{lastMatch.name}</strong> vous êtes likés mutuellement
