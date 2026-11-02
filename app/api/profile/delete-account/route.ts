@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as jwt from 'jsonwebtoken';
+import { verifyAccessToken } from '@/lib/auth/access-token';
 import connectDB from '@/lib/db/mongodb';
 import User from '@/lib/models/User';
+import Match from '@/lib/models/Match';
+import Like from '@/lib/models/Like';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this-in-production';
 
 export async function DELETE(request: NextRequest) {
   try {
@@ -17,11 +18,13 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const decoded: any = jwt.verify(token, JWT_SECRET);
+    const decoded: any = verifyAccessToken(token);
     await connectDB();
 
-    // Delete the user account
-    const deletedUser = await User.findByIdAndDelete(decoded.userId);
+    // Hide first, then clean related data before removing the account.
+    // This works with local standalone MongoDB (no transaction support).
+    const deletedUser = await User.findByIdAndUpdate(decoded.userId,
+      { $set: { 'privacySettings.profileVisibility': false } });
 
     if (!deletedUser) {
       return NextResponse.json(
@@ -29,6 +32,10 @@ export async function DELETE(request: NextRequest) {
         { status: 404 }
       );
     }
+
+    await Match.deleteMany({ users: decoded.userId });
+    await Like.deleteMany({ $or: [{ from: decoded.userId }, { to: decoded.userId }] });
+    await User.findByIdAndDelete(decoded.userId);
 
     return NextResponse.json({
       success: true,

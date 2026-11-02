@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
 import Match from '@/lib/models/Match';
 import User from '@/lib/models/User';
-import jwt from 'jsonwebtoken';
+import { verifyAccessToken } from '@/lib/auth/access-token';
 
 /**
  * GET /api/match/list
@@ -22,7 +22,7 @@ export async function GET(request) {
 
     let decoded;
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET);
+      decoded = verifyAccessToken(token);
     } catch (error) {
       return NextResponse.json(
         { success: false, message: 'Token invalide' },
@@ -36,14 +36,16 @@ export async function GET(request) {
     const matches = await Match.find({
       users: decoded.userId
     })
-    .populate('users', 'name email bio avatar createdAt')
+    .populate('users', 'name email bio avatar createdAt privacySettings')
     .sort({ createdAt: -1 });
 
     // Format matches to show the other user
-    const formattedMatches = matches.map(match => {
+    const formattedMatches = matches.flatMap(match => {
       const otherUser = match.users.find(
-        user => user._id.toString() !== decoded.userId
+        user => user && user._id.toString() !== decoded.userId
       );
+
+      if (!otherUser || otherUser.privacySettings?.profileVisibility === false) return [];
 
       return {
         matchId: match._id.toString(),

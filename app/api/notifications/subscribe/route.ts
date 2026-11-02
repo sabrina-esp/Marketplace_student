@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import * as jwt from 'jsonwebtoken';
+import { verifyAccessToken } from '@/lib/auth/access-token';
 import connectDB from '@/lib/db/mongodb';
 import User from '@/lib/models/User';
 
@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
     let decoded;
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+      decoded = verifyAccessToken(token);
     } catch (error) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }

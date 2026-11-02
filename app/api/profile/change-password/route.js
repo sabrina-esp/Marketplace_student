@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
 import User from '@/lib/models/User';
-import jwt from 'jsonwebtoken';
+import { verifyAccessToken } from '@/lib/auth/access-token';
 
 /**
  * PUT /api/profile/change-password
@@ -23,7 +23,7 @@ export async function PUT(request) {
     // Vérifier le token
     let decoded;
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET);
+      decoded = verifyAccessToken(token);
     } catch (error) {
       return NextResponse.json(
         { success: false, message: 'Token invalide ou expiré' },

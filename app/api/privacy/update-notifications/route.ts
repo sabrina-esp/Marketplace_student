@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as jwt from 'jsonwebtoken';
+import { verifyAccessToken } from '@/lib/auth/access-token';
 import connectDB from '@/lib/db/mongodb';
 import User from '@/lib/models/User';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-this-in-production';
 
 export async function PUT(request: NextRequest) {
   try {
@@ -17,10 +16,14 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const decoded: any = jwt.verify(token, JWT_SECRET);
+    const decoded: any = verifyAccessToken(token);
     await connectDB();
 
     const { privacyNotifications } = await request.json();
+
+    if (typeof privacyNotifications !== 'boolean') {
+      return NextResponse.json({ success: false, message: 'privacyNotifications must be a boolean' }, { status: 400 });
+    }
 
     const user = await User.findByIdAndUpdate(
       decoded.userId,

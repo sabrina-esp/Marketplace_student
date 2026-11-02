@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
+import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
 
 const source = readFileSync(new URL('../public/sw.js', import.meta.url), 'utf8');
@@ -73,7 +74,7 @@ test('activation removes the old cache containing private responses', async () =
 });
 
 test('API responses have server-side no-store headers', async () => {
-  const { default: config } = await import('../next.config.js');
+  const config = createRequire(import.meta.url)('../next.config.js');
   const rules = await config.headers();
   assert.ok(rules.find(rule => rule.source === '/api/:path*').headers.some(
     header => header.key === 'Cache-Control' && header.value.includes('no-store')));

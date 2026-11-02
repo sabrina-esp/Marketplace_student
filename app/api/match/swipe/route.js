@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
 import Like from '@/lib/models/Like';
 import Match from '@/lib/models/Match';
-import jwt from 'jsonwebtoken';
+import User from '@/lib/models/User';
+import { verifyAccessToken } from '@/lib/auth/access-token';
 
 /**
  * POST /api/match/swipe
@@ -22,7 +23,7 @@ export async function POST(request) {
 
     let decoded;
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET);
+      decoded = verifyAccessToken(token);
     } catch (error) {
       return NextResponse.json(
         { success: false, message: 'Token invalide' },
@@ -32,7 +33,7 @@ export async function POST(request) {
 
     const { targetUserId, action } = await request.json();
 
-    if (!targetUserId || !['like', 'dislike'].includes(action)) {
+    if (typeof targetUserId !== 'string' || !/^[a-f\d]{24}$/i.test(targetUserId) || !['like', 'dislike'].includes(action)) {
       return NextResponse.json(
         { success: false, message: 'Données invalides' },
         { status: 400 }
@@ -47,6 +48,13 @@ export async function POST(request) {
     }
 
     await connectDB();
+
+    const currentUser = await User.exists({ _id: decoded.userId });
+    const target = await User.exists({ _id: targetUserId,
+      'privacySettings.profileVisibility': { $ne: false }, isEmailVerified: true });
+    if (!currentUser || !target) {
+      return NextResponse.json({ success: false, message: 'Profil indisponible' }, { status: 404 });
+    }
 
     // Check if already swiped
     const existing = await Like.findOne({

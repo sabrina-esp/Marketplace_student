@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
-import jwt from 'jsonwebtoken';
+import { verifyAccessToken } from '@/lib/auth/access-token';
 
 export async function POST(req) {
   try {
@@ -11,7 +11,7 @@ export async function POST(req) {
     }
 
     try {
-      jwt.verify(token, process.env.JWT_SECRET);
+      verifyAccessToken(token);
     } catch (error) {
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
     }

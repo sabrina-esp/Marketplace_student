@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/db/mongodb';
 import User from '@/lib/models/User';
-import jwt from 'jsonwebtoken';
+import { verifyAccessToken } from '@/lib/auth/access-token';
 
 /**
  * GET /api/auth/me
@@ -21,7 +21,7 @@ export async function GET(request) {
     }
 
     // Vérifier le token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = verifyAccessToken(token);
 
     // Connecter à la base de données
     await connectDB();

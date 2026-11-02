@@ -3,7 +3,7 @@ import { connectDB } from '@/lib/db/mongodb';
 import User from '@/lib/models/User';
 import Like from '@/lib/models/Like';
 import MatchingService from '@/lib/services/MatchingService';
-import jwt from 'jsonwebtoken';
+import { verifyAccessToken } from '@/lib/auth/access-token';
 
 /**
  * GET /api/match/potentials
@@ -24,7 +24,7 @@ export async function GET(request) {
 
     let decoded;
     try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET);
+      decoded = verifyAccessToken(token);
     } catch (error) {
       return NextResponse.json(
         { success: false, message: 'Token invalide' },
@@ -51,12 +51,14 @@ export async function GET(request) {
     
     // Exclude current user and already swiped users
     const potentials = await User.find({
+      'privacySettings.profileVisibility': { $ne: false },
+      isEmailVerified: true,
       _id: { 
         $ne: decoded.userId,
         $nin: swipedIds
       }
     })
-    .select('name email bio avatar subjects interests level createdAt')
+    .select('name bio avatar subjects interests level createdAt')
     .limit(50); // Get more to sort by AI
 
     // Use AI matching to calculate compatibility and sort
@@ -70,7 +72,6 @@ export async function GET(request) {
       potentials.map(user => ({
         id: user._id.toString(),
         name: user.name || 'Utilisateur',
-        email: user.email,
         bio: user.bio || 'Pas de bio',
         avatar: user.avatar,
         subjects: user.subjects || [],

@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
-import jwt from 'jsonwebtoken';
+import { verifyAccessToken } from '@/lib/auth/access-token';
 import User from '@/lib/models/User';
 import dbConnect from '@/lib/db/mongodb';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
 export async function POST(request) {
   try {
@@ -17,7 +16,7 @@ export async function POST(request) {
     let decoded;
     
     try {
-      decoded = jwt.verify(token, JWT_SECRET);
+      decoded = verifyAccessToken(token);
     } catch (error) {
       return NextResponse.json({ success: false, message: 'Invalid token' }, { status: 401 });
     }
